@@ -890,7 +890,7 @@ var MODEL_CONFIGS = {
     name:'智谱AI', endpoint:'https://open.bigmodel.cn/api/paas/v4/chat/completions',
     defaultKey:'d66eba51f54e4211aed6f9af217ca122.pKK63AJ6GVVRN4xk',
     headers:function(k){return {'Content-Type':'application/json','Authorization':'Bearer '+k};},
-    body:function(m,k){return JSON.stringify({model:m,messages:[{role:'system',content:'杭州中考志愿专家，专业务实简洁。纯文本，不用Markdown。风格：鼓励但理性。'},{role:'user',content:k}],temperature:0.5,max_tokens:500});}
+    body:function(m,k){return JSON.stringify({model:m,messages:[{role:'user',content:k}],temperature:0.5,max_tokens:500});}
   },
   'siliconflow': {
     name:'硅基流动', endpoint:'https://api.siliconflow.cn/v1/chat/completions',
@@ -899,6 +899,8 @@ var MODEL_CONFIGS = {
     body:function(m,k){return JSON.stringify({model:m,messages:[{role:'system',content:'杭州中考志愿专家，专业务实简洁。纯文本。'},{role:'user',content:k}],temperature:0.5,max_tokens:500});}
   }
 };
+
+var AI_TIMEOUT_MS = 20000; // 20s timeout for AI API calls
 
 function getKey(platform){return localStorage.getItem('zk_key_'+platform)||MODEL_CONFIGS[platform].defaultKey||'';}
 function saveKey(platform,key){localStorage.setItem('zk_key_'+platform,key);}
@@ -949,6 +951,10 @@ function generate() {
   document.getElementById('submitBtn').disabled=true;
   document.getElementById('reportBox').style.display='none';
 
+  // Show which model is being called
+  var sel2 = document.getElementById('modelSelect').value.split('|');
+  document.querySelector('#loadingBox p').textContent = '正在调用 '+MODEL_CONFIGS[sel2[0]].name+'('+sel2[1]+')...';
+
   var calc = compute(data);
 
   // Build AI prompt
@@ -964,12 +970,21 @@ function generate() {
   var platform = sel[0], model = sel[1];
   var cfg = MODEL_CONFIGS[platform];
   var key = getKey(platform);
-  if (!key) { showError('请先输入API Key'); resetBtn(); return; }
+  if (!key) { showError('请先选择模型并输入API Key（硅基流动需要Key，智谱内置Key）'); resetBtn(); return; }
+
+  // Use AbortController for timeout
+  var controller = new AbortController();
+  var timeoutId = setTimeout(function(){ controller.abort(); }, AI_TIMEOUT_MS);
 
   fetch(cfg.endpoint, {
-    method:'POST', headers:cfg.headers(key), body:cfg.body(model, prompt)
+    method:'POST', headers:cfg.headers(key), body:cfg.body(model, prompt),
+    signal: controller.signal
   })
-  .then(function(r){if(!r.ok) throw new Error(r.status+' '+r.statusText); return r.json();})
+  .then(function(r){
+    clearTimeout(timeoutId);
+    if(!r.ok) throw new Error('HTTP '+r.status+': '+r.statusText);
+    return r.json();
+  })
   .then(function(json){
     var ai = (json.choices&&json.choices[0]&&json.choices[0].message.content)||'AI分析暂不可用';
     document.getElementById('reportBody').innerHTML = renderReport(data, calc, ai);
@@ -979,8 +994,10 @@ function generate() {
     resetBtn();
   })
   .catch(function(e){
-    showError('AI调用失败: '+e.message+'。将使用纯计算公式生成方案。');
-    document.getElementById('reportBody').innerHTML = renderReport(data, calc, '<p style="color:#f39c12">⚠ AI服务暂不可用，以下为纯数据计算方案。建议检查网络或API Key后重试。</p><p>核心建议：分配生冲要敢于冲（10-20分），第5志愿必须托底，裸考在620-625分段至少拉开3-5分梯度。</p>');
+    clearTimeout(timeoutId);
+    var errMsg = e.name==='AbortError' ? 'AI调用超时(>'+AI_TIMEOUT_MS/1000+'s)，请检查网络或切换模型' : ('AI调用失败: '+e.message);
+    showError(errMsg+'。将使用纯计算公式生成方案。');
+    document.getElementById('reportBody').innerHTML = renderReport(data, calc, '<div style="background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.2);border-radius:10px;padding:16px;margin-bottom:12px"><p style="color:#e74c3c;font-weight:700">⚠ AI服务暂不可用</p><p style="color:var(--text-secondary)">'+errMsg+'</p><p style="margin-top:8px;color:var(--text-secondary)">以下为纯数据计算方案。可尝试：<br>1) 切换模型（如从硅基流动切到智谱）<br>2) 检查硅基流动API Key是否正确<br>3) 重试生成</p></div><p>核心建议：分配生冲要敢于冲（10-20分），第5志愿必须托底，裸考在620-625分段至少拉开3-5分梯度。</p>');
     document.getElementById('loadingBox').style.display='none';
     document.getElementById('reportBox').style.display='block';
     document.getElementById('reportBox').scrollIntoView({behavior:'smooth'});
