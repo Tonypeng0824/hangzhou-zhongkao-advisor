@@ -894,13 +894,13 @@ var MODEL_CONFIGS = {
   },
   'siliconflow': {
     name:'硅基流动', endpoint:'https://api.siliconflow.cn/v1/chat/completions',
-    defaultKey:'',
+    defaultKey:'sk-tyohyikrluknwkwxwerrwmxldlgzzicwaanazgvpoihsoohb',
     headers:function(k){return {'Content-Type':'application/json','Authorization':'Bearer '+k};},
     body:function(m,k){return JSON.stringify({model:m,messages:[{role:'system',content:'杭州中考志愿专家，专业务实简洁。纯文本。'},{role:'user',content:k}],temperature:0.5,max_tokens:500});}
   }
 };
 
-var AI_TIMEOUT_MS = 20000; // 20s timeout for AI API calls
+var AI_TIMEOUT_MS = 45000; // 45s timeout (SiliconFlow can be slow on first request)
 
 function getKey(platform){return localStorage.getItem('zk_key_'+platform)||MODEL_CONFIGS[platform].defaultKey||'';}
 function saveKey(platform,key){localStorage.setItem('zk_key_'+platform,key);}
