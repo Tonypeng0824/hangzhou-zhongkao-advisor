@@ -441,11 +441,11 @@ body {
       <span>🤖 模型：</span>
       <select id="modelSelect" onchange="onModelChange()">
         <optgroup label="智谱AI（已配置·免费）">
-          <option value="zhipu|glm-4-flash">GLM-4-Flash（快速·默认）</option>
-        </optgroup>
-        <optgroup label="硅基流动 SiliconFlow（已配置·免费）">
-          <option value="siliconflow|deepseek-ai/DeepSeek-R1">DeepSeek-R1（推理强）</option>
-          <option value="siliconflow|Qwen/Qwen3-8B">Qwen3-8B（中文好）</option>
+                    <option value="siliconflow|Qwen/Qwen3-8B" selected>Qwen3-8B（中文好·默认）</option>
+                    <option value="siliconflow|deepseek-ai/DeepSeek-R1">DeepSeek-R1（推理强）</option>
+                </optgroup>
+                <optgroup label="智谱AI（已配置·免费·⚠可能CORS受限）">
+                    <option value="zhipu|glm-4-flash">GLM-4-Flash（快速·本地可用）</option>
         </optgroup>
       </select>
     </div>
@@ -995,9 +995,15 @@ function generate() {
   })
   .catch(function(e){
     clearTimeout(timeoutId);
-    var errMsg = e.name==='AbortError' ? 'AI调用超时(>'+AI_TIMEOUT_MS/1000+'s)，请检查网络或切换模型' : ('AI调用失败: '+e.message);
-    showError(errMsg+'。将使用纯计算公式生成方案。');
-    document.getElementById('reportBody').innerHTML = renderReport(data, calc, '<div style="background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.2);border-radius:10px;padding:16px;margin-bottom:12px"><p style="color:#e74c3c;font-weight:700">⚠ AI服务暂不可用</p><p style="color:var(--text-secondary)">'+errMsg+'</p><p style="margin-top:8px;color:var(--text-secondary)">以下为纯数据计算方案。可尝试：<br>1) 切换模型（如从硅基流动切到智谱）<br>2) 检查硅基流动API Key是否正确<br>3) 重试生成</p></div><p>核心建议：分配生冲要敢于冲（10-20分），第5志愿必须托底，裸考在620-625分段至少拉开3-5分梯度。</p>');
+    var isTimeout = e.name==='AbortError';
+    var isCors = e.message && (e.message.includes('Failed to fetch') || e.message.includes('NetworkError'));
+    var errMsg = isTimeout ? ('AI调用超时(>'+AI_TIMEOUT_MS/1000+'s)')
+               : isCors ? ('CORS跨域限制（浏览器安全策略）。云端部署版本无此问题，本地请使用SiliconFlow模型或通过CloudStudio访问）')
+               : ('AI调用失败: '+e.message);
+    var tip = isCors ? '<p style="margin-top:8px;color:#f39c12">💡 建议: 切换为 Qwen3-8B（已默认选中）重试，或通过 <a href="https://cd106c108ee44074b48910197f882d80.app.codebuddy.work" style="color:#3498db" target="_blank">CloudStudio</a> 访问云端版本</p>'
+             : '<p style="margin-top:8px;color:var(--text-secondary)">可尝试: 1) 切换模型 2) 检查网络 3) 重试</p>';
+    showError(errMsg+'。已降级为纯计算公式方案。');
+    document.getElementById('reportBody').innerHTML = renderReport(data, calc, '<div style="background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.2);border-radius:10px;padding:16px;margin-bottom:12px"><p style="color:#e74c3c;font-weight:700">'+errMsg+'</p>'+tip+'</div><p>核心建议：分配生冲要敢于冲（10-20分），第5志愿必须托底，裸考在620-625分段至少拉开3-5分梯度。</p>');
     document.getElementById('loadingBox').style.display='none';
     document.getElementById('reportBox').style.display='block';
     document.getElementById('reportBox').scrollIntoView({behavior:'smooth'});
