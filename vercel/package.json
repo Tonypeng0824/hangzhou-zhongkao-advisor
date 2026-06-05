@@ -1,0 +1,8 @@
+{
+  "name": "zhongkao-advisor",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "杭州中考志愿智能填报",
+  "scripts": {},
+  "dependencies": {}
+}

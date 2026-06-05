@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>杭州中考志愿智能填报 - 数智工具箱</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:linear-gradient(135deg,#f0fdf4 0%,#ecfeff 50%,#eff6ff 100%);color:#1e293b;line-height:1.6;min-height:100vh}
+.nav{background:white;padding:14px 20px;box-shadow:0 1px 3px rgba(0,0,0,0.04);border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:16px}
+.nav a{color:#2563eb;text-decoration:none;font-weight:500;font-size:0.9em}
+.container{max-width:840px;margin:0 auto;padding:30px 20px}
+.header{text-align:center;margin-bottom:30px}
+.header h1{font-size:2em;font-weight:800;color:#0f172a;margin-bottom:6px}
+.header p{color:#64748b}
+.form-card{background:white;border-radius:16px;padding:32px;box-shadow:0 4px 24px rgba(0,0,0,0.06);border:1px solid #f1f5f9;margin-bottom:24px}
+.form-card h2{font-size:1.15em;margin-bottom:16px;color:#0f172a;display:flex;align-items:center;gap:8px}
+.section-label{font-size:0.95em;font-weight:700;color:#059669;margin:20px 0 12px;padding-bottom:6px;border-bottom:2px solid #f0fdf4}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:8px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:8px}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:0.84em;font-weight:600;color:#475569;margin-bottom:5px}
+.form-group label .opt{font-weight:400;color:#94a3b8;font-size:0.9em}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:11px 14px;border:2px solid #e2e8f0;border-radius:10px;font-size:0.93em;transition:border-color 0.2s;background:#f8fafc}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:#059669;outline:none;background:white}
+.form-group textarea{resize:vertical;min-height:60px}
+.form-group .hint{font-size:0.75em;color:#94a3b8;margin-top:3px}
+.optional-section{background:#fafbfc;border:1px dashed #e2e8f0;border-radius:12px;padding:20px;margin-top:16px}
+.optional-section summary{font-weight:600;color:#64748b;cursor:pointer;font-size:0.93em;padding:4px 0}
+.optional-section summary:hover{color:#059669}
+.optional-section[open] summary{margin-bottom:12px}
+.btn-submit{width:100%;padding:14px;background:linear-gradient(135deg,#059669,#0d9488);color:white;border:none;border-radius:12px;font-size:1.1em;font-weight:700;cursor:pointer;transition:all 0.3s;margin-top:8px}
+.btn-submit:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(5,150,105,0.3)}
+.btn-submit:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+.result-card{background:white;border-radius:16px;padding:32px;box-shadow:0 4px 24px rgba(0,0,0,0.06);border:1px solid #f1f5f9;display:none;line-height:1.8}
+.result-card h2{font-size:1.3em;margin-bottom:16px;color:#059669}
+.result-content{font-size:0.95em;color:#334155}
+.result-content h3{color:#0f172a;margin:16px 0 8px;font-size:1.05em}
+.result-content table{width:100%;border-collapse:collapse;margin:12px 0;font-size:0.9em}
+.result-content td,.result-content th{border:1px solid #e2e8f0;padding:8px 12px;text-align:left}
+.result-content th{background:#f0fdf4;font-weight:600}
+.loading{display:none;text-align:center;padding:40px}
+.loading .spinner{width:48px;height:48px;border:4px solid #e2e8f0;border-top-color:#059669;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading p{color:#64748b;font-size:0.95em}
+.error{background:#fef2f2;color:#dc2626;padding:16px;border-radius:10px;margin-bottom:16px;display:none}
+.info-bar{background:white;border-radius:12px;padding:16px 20px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,0.04);border:1px solid #f1f5f9;display:flex;align-items:center;gap:10px;font-size:0.88em;color:#475569}
+.info-bar .dot{width:8px;height:8px;background:#22c55e;border-radius:50%;flex-shrink:0}
+.footer{text-align:center;padding:40px 20px;color:#94a3b8;font-size:0.85em}
+.footer a{color:#64748b;text-decoration:none}
+@media(max-width:640px){.form-row,.form-row-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="nav">
+  <span style="color:#64748b;font-size:0.9em">🎓 杭州中考志愿智能填报</span>
+</div>
+
+<div class="container">
+  <div class="header">
+    <h1>🎓 中考志愿智能填报</h1>
+    <p>填入成绩 → AI深度分析 → 生成冲/稳/保志愿方案</p>
+  </div>
+
+  <div class="info-bar">
+    <div class="dot"></div>
+    <span>基于智谱AI GLM-4-Flash · 2026年杭州中考数据 · 分配生政策评估 · 个性化方案</span>
+  </div>
+
+  <div class="form-card">
+    <h2>📝 基本信息</h2>
+    <div class="form-row">
+      <div class="form-group">
+        <label>昵称 <span class="opt">(选填)</span></label>
+        <input type="text" id="nickname" placeholder="如：小明">
+      </div>
+      <div class="form-group">
+        <label>杭州地区所在中学名称 <span style="color:#dc2626">*</span></label>
+        <input type="text" id="schoolName" placeholder="如：杭州市十三中教育集团" required>
+        <div class="hint">用于评估该校分配生配额及历年录取情况</div>
+      </div>
+    </div>
+
+    <div class="section-label">📊 一模成绩</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>一模成绩（分）<span style="color:#dc2626">*</span></label>
+        <input type="number" id="mock1Score" placeholder="如：568" step="0.1" required>
+      </div>
+      <div class="form-group">
+        <label>一模年排 <span class="opt">(选填)</span></label>
+        <input type="number" id="mock1Rank" placeholder="如：120">
+        <div class="hint">年级排名，用于分配生资格评估</div>
+      </div>
+    </div>
+
+    <div class="section-label">📊 二模成绩</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>二模成绩（分）<span style="color:#dc2626">*</span></label>
+        <input type="number" id="mock2Score" placeholder="如：576.5" step="0.1" required>
+      </div>
+      <div class="form-group">
+        <label>二模年排 <span class="opt">(选填)</span></label>
+        <input type="number" id="mock2Rank" placeholder="如：76">
+        <div class="hint">年级排名，用于分配生资格评估</div>
+      </div>
+    </div>
+
+    <div class="section-label">🏠 志愿偏好</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>目标学校/偏好 <span class="opt">(选填)</span></label>
+        <textarea id="targets" placeholder="如：想冲杭二中，理科强，希望校风好"></textarea>
+      </div>
+      <div class="form-group">
+        <label>家庭地址 <span class="opt">(选填)</span></label>
+        <input type="text" id="homeAddress" placeholder="如：西湖区文三路XX小区">
+        <div class="hint">用于评估通勤距离和就近学校推荐</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>是否住校</label>
+      <select id="boarding">
+        <option value="不限">不限</option>
+        <option value="是">希望住校</option>
+        <option value="否">希望走读（不住校）</option>
+      </select>
+    </div>
+
+    <details class="optional-section" id="optionalSection">
+      <summary>📋 补充成绩（选填，填写越多分析越精准）</summary>
+      <div class="form-row">
+        <div class="form-group">
+          <label>八下期末成绩（分）</label>
+          <input type="number" id="grade8bScore" placeholder="如：545" step="0.1">
+        </div>
+        <div class="form-group">
+          <label>八下年排</label>
+          <input type="number" id="grade8bRank" placeholder="如：150">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>九上期末成绩（分）</label>
+          <input type="number" id="grade9aScore" placeholder="如：560" step="0.1">
+        </div>
+        <div class="form-group">
+          <label>九上年排</label>
+          <input type="number" id="grade9aRank" placeholder="如：100">
+        </div>
+      </div>
+    </details>
+
+    <button class="btn-submit" id="submitBtn" onclick="generatePlan()">
+      🤖 AI 生成志愿方案
+    </button>
+  </div>
+
+  <div class="error" id="errorBox"></div>
+
+  <div class="loading" id="loadingBox">
+    <div class="spinner"></div>
+    <p>AI 正在综合分析你的成绩趋势...</p>
+    <p style="font-size:0.82em;color:#94a3b8">预计需要 8-12 秒</p>
+  </div>
+
+  <div class="result-card" id="resultBox">
+    <h2>📋 AI 个性化志愿方案</h2>
+    <div class="result-content" id="resultContent"></div>
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid #e2e8f0;font-size:0.8em;color:#94a3b8">
+      ⚠️ 本方案由AI生成，仅供参考。实际志愿填报请咨询学校老师，结合官方政策和最新数据。
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>Powered by 智谱AI GLM-4-Flash · 2026年杭州中考数据分析</p>
+</div>
+
+<script>
+// ==================== 调用API ====================
+async function generatePlan() {
+    const mock1Score = document.getElementById('mock1Score').value;
+    const mock2Score = document.getElementById('mock2Score').value;
+    const schoolName = document.getElementById('schoolName').value;
+
+    if (!mock1Score && !mock2Score) {
+        showError('请至少填写一模或二模成绩');
+        return;
+    }
+    if (!schoolName) {
+        showError('请填写所在中学名称');
+        return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ AI 深度分析中...';
+    document.getElementById('errorBox').style.display = 'none';
+    document.getElementById('resultBox').style.display = 'none';
+    document.getElementById('loadingBox').style.display = 'block';
+
+    const payload = {
+        nickname: document.getElementById('nickname').value || '',
+        schoolName: schoolName,
+        mock1Score: mock1Score ? parseFloat(mock1Score) : null,
+        mock1Rank: document.getElementById('mock1Rank').value ? parseInt(document.getElementById('mock1Rank').value) : null,
+        mock2Score: mock2Score ? parseFloat(mock2Score) : null,
+        mock2Rank: document.getElementById('mock2Rank').value ? parseInt(document.getElementById('mock2Rank').value) : null,
+        targets: document.getElementById('targets').value || '',
+        homeAddress: document.getElementById('homeAddress').value || '',
+        boarding: document.getElementById('boarding').value || '不限',
+        grade8bScore: document.getElementById('grade8bScore').value ? parseFloat(document.getElementById('grade8bScore').value) : null,
+        grade8bRank: document.getElementById('grade8bRank').value ? parseInt(document.getElementById('grade8bRank').value) : null,
+        grade9aScore: document.getElementById('grade9aScore').value ? parseFloat(document.getElementById('grade9aScore').value) : null,
+        grade9aRank: document.getElementById('grade9aRank').value ? parseInt(document.getElementById('grade9aRank').value) : null,
+    };
+
+    try {
+        const response = await fetch('/api/zhongkao', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || data.error) {
+            throw new Error(data.error || '请求失败');
+        }
+
+        document.getElementById('loadingBox').style.display = 'none';
+        document.getElementById('resultBox').style.display = 'block';
+        document.getElementById('resultContent').innerHTML = formatMarkdown(data.result);
+
+    } catch (error) {
+        document.getElementById('loadingBox').style.display = 'none';
+        showError(error.message || '服务异常，请稍后重试');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '🤖 AI 生成志愿方案';
+    }
+}
+
+// ==================== Markdown渲染 ====================
+function formatMarkdown(text) {
+    if (!text) return '<p>暂无结果</p>';
+    let html = text
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/^### (.+)$/gm, '<h3 style="color:#0f172a;margin:16px 0 8px">$1</h3>')
+        .replace(/^## (.+)$/gm, '<h3 style="color:#0f172a;margin:16px 0 8px;font-size:1.15em">$1</h3>')
+        .replace(/^# (.+)$/gm, '<h2 style="color:#0f172a;margin:20px 0 10px">$1</h2>')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n\|(.+)\|/g, (m, row) => {
+            const cells = row.split('|').map(c => c.trim());
+            return '\n<tr>' + cells.map(c => `<td>${c}</td>`).join('') + '</tr>';
+        })
+        .replace(/^- (.+)$/gm, '<li>$1</li>')
+        .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>');
+    return '<p>' + html + '</p>';
+}
+
+function showError(msg) {
+    const box = document.getElementById('errorBox');
+    box.textContent = '❌ ' + msg;
+    box.style.display = 'block';
+}
+</script>
+</body>
+</html>
