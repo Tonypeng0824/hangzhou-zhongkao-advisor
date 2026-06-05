@@ -3,270 +3,1000 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>杭州中考志愿智能填报 - 数智工具箱</title>
+<title>杭州中考志愿智能填报 v4.0</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:linear-gradient(135deg,#f0fdf4 0%,#ecfeff 50%,#eff6ff 100%);color:#1e293b;line-height:1.6;min-height:100vh}
-.nav{background:white;padding:14px 20px;box-shadow:0 1px 3px rgba(0,0,0,0.04);border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:16px}
-.nav a{color:#2563eb;text-decoration:none;font-weight:500;font-size:0.9em}
-.container{max-width:840px;margin:0 auto;padding:30px 20px}
-.header{text-align:center;margin-bottom:30px}
-.header h1{font-size:2em;font-weight:800;color:#0f172a;margin-bottom:6px}
-.header p{color:#64748b}
-.form-card{background:white;border-radius:16px;padding:32px;box-shadow:0 4px 24px rgba(0,0,0,0.06);border:1px solid #f1f5f9;margin-bottom:24px}
-.form-card h2{font-size:1.15em;margin-bottom:16px;color:#0f172a;display:flex;align-items:center;gap:8px}
-.section-label{font-size:0.95em;font-weight:700;color:#059669;margin:20px 0 12px;padding-bottom:6px;border-bottom:2px solid #f0fdf4}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:8px}
-.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:8px}
-.form-group{margin-bottom:14px}
-.form-group label{display:block;font-size:0.84em;font-weight:600;color:#475569;margin-bottom:5px}
-.form-group label .opt{font-weight:400;color:#94a3b8;font-size:0.9em}
-.form-group input,.form-group textarea,.form-group select{width:100%;padding:11px 14px;border:2px solid #e2e8f0;border-radius:10px;font-size:0.93em;transition:border-color 0.2s;background:#f8fafc}
-.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:#059669;outline:none;background:white}
-.form-group textarea{resize:vertical;min-height:60px}
-.form-group .hint{font-size:0.75em;color:#94a3b8;margin-top:3px}
-.optional-section{background:#fafbfc;border:1px dashed #e2e8f0;border-radius:12px;padding:20px;margin-top:16px}
-.optional-section summary{font-weight:600;color:#64748b;cursor:pointer;font-size:0.93em;padding:4px 0}
-.optional-section summary:hover{color:#059669}
-.optional-section[open] summary{margin-bottom:12px}
-.btn-submit{width:100%;padding:14px;background:linear-gradient(135deg,#059669,#0d9488);color:white;border:none;border-radius:12px;font-size:1.1em;font-weight:700;cursor:pointer;transition:all 0.3s;margin-top:8px}
-.btn-submit:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(5,150,105,0.3)}
-.btn-submit:disabled{opacity:0.6;cursor:not-allowed;transform:none}
-.result-card{background:white;border-radius:16px;padding:32px;box-shadow:0 4px 24px rgba(0,0,0,0.06);border:1px solid #f1f5f9;display:none;line-height:1.8}
-.result-card h2{font-size:1.3em;margin-bottom:16px;color:#059669}
-.result-content{font-size:0.95em;color:#334155}
-.result-content h3{color:#0f172a;margin:16px 0 8px;font-size:1.05em}
-.result-content table{width:100%;border-collapse:collapse;margin:12px 0;font-size:0.9em}
-.result-content td,.result-content th{border:1px solid #e2e8f0;padding:8px 12px;text-align:left}
-.result-content th{background:#f0fdf4;font-weight:600}
-.loading{display:none;text-align:center;padding:40px}
-.loading .spinner{width:48px;height:48px;border:4px solid #e2e8f0;border-top-color:#059669;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading p{color:#64748b;font-size:0.95em}
-.error{background:#fef2f2;color:#dc2626;padding:16px;border-radius:10px;margin-bottom:16px;display:none}
-.info-bar{background:white;border-radius:12px;padding:16px 20px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,0.04);border:1px solid #f1f5f9;display:flex;align-items:center;gap:10px;font-size:0.88em;color:#475569}
-.info-bar .dot{width:8px;height:8px;background:#22c55e;border-radius:50%;flex-shrink:0}
-.footer{text-align:center;padding:40px 20px;color:#94a3b8;font-size:0.85em}
-.footer a{color:#64748b;text-decoration:none}
-@media(max-width:640px){.form-row,.form-row-3{grid-template-columns:1fr}}
+/* ===== CSS Variables ===== */
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-card: rgba(18, 18, 30, 0.85);
+  --bg-card-hover: rgba(25, 25, 42, 0.9);
+  --text-primary: #e8e8f0;
+  --text-secondary: #9898b0;
+  --accent-gold: #f0b90b;
+  --accent-red: #e74c3c;
+  --accent-green: #2ecc71;
+  --accent-blue: #3498db;
+  --accent-purple: #9b59b6;
+  --border: rgba(255, 255, 255, 0.08);
+  --glass: rgba(255, 255, 255, 0.04);
+  --glass-hover: rgba(255, 255, 255, 0.08);
+  --shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --font-display: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-mono: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-display);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  transition: background 0.6s ease;
+}
+
+/* ===== Dynamic Background Layers ===== */
+.bg-layer {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: -3; pointer-events: none; opacity: 0;
+  background-size: cover; background-position: center;
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.bg-layer.active { opacity: 1; }
+.bg-layer::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(10,10,15,0.65) 0%, rgba(10,10,15,0.82) 50%, rgba(10,10,15,0.92) 100%);
+}
+
+/* Background presets */
+.bg-nba-kobe { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%23552B84"/><stop offset="50%" stop-color="%23FDB927"/><stop offset="100%" stop-color="%23552B84"/></linearGradient></defs><rect fill="url(%23g)" width="1440" height="900"/></svg>'); }
+.bg-nba-lebron { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%2386022D"/><stop offset="50%" stop-color="%23FDB927"/><stop offset="100%" stop-color="%2386022D"/></linearGradient></defs><rect fill="url(%23g)" width="1440" height="900"/></svg>'); }
+.bg-nba-curry { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900"><defs><linearGradient id="g" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="%230068BB"/><stop offset="50%" stop-color="%23FDB927"/><stop offset="100%" stop-color="%230068BB"/></linearGradient></defs><rect fill="url(%23g)" width="1440" height="900"/></svg>'); }
+.bg-star-wyb { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%23FF2048"/><stop offset="50%" stop-color="%23000000"/><stop offset="100%" stop-color="%23FF2048"/></linearGradient></defs><rect fill="url(%23g)" width="1440" height="900"/></svg>'); }
+.bg-star-yyqx { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%23006400"/><stop offset="50%" stop-color="%23FF4500"/><stop offset="100%" stop-color="%23006400"/></linearGradient></defs><rect fill="url(%23g)" width="1440" height="900"/></svg>'); }
+.bg-anime-naruto { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%23FF6B00"/><stop offset="50%" stop-color="%23001F3F"/><stop offset="100%" stop-color="%23FF6B00"/></linearGradient></defs><rect fill="url(%23g)" width="1440" height="900"/></svg>'); }
+.bg-anime-demon { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%23000000"/><stop offset="50%" stop-color="%239E1F2C"/><stop offset="100%" stop-color="%23000000"/></linearGradient></defs><rect fill="url(%23g)" width="1440" height="900"/></svg>'); }
+.bg-anime-onepiece { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%230064BA"/><stop offset="50%" stop-color="%23E8A822"/><stop offset="100%" stop-color="%230064BA"/></linearGradient></defs><rect fill="url(%23g)" width="1440" height="900"/></svg>'); }
+
+/* ===== Particle Effects ===== */
+.particles {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: -2; pointer-events: none; overflow: hidden;
+}
+.particle {
+  position: absolute; border-radius: 50%;
+  animation: floatUp 8s linear infinite;
+  opacity: 0.15;
+}
+@keyframes floatUp {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  10% { opacity: 0.2; }
+  90% { opacity: 0.2; }
+  100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+}
+
+/* ===== Top Navigation ===== */
+.top-nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(10, 10, 15, 0.75);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.top-nav .logo {
+  font-size: 1.25em; font-weight: 800;
+  background: linear-gradient(135deg, var(--accent-gold), #ff6b35);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  display: flex; align-items: center; gap: 8px;
+}
+.top-nav .logo svg { width: 28px; height: 28px; }
+.nav-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+/* ===== Theme/BG Selector ===== */
+.theme-picker {
+  position: relative;
+}
+.theme-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px; border-radius: 24px;
+  border: 1px solid var(--border); background: var(--glass);
+  color: var(--text-primary); font-size: 0.85em; cursor: pointer;
+  transition: all 0.3s ease; font-family: var(--font-display);
+}
+.theme-btn:hover { background: var(--glass-hover); border-color: var(--accent-gold); }
+.theme-btn .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.theme-dropdown {
+  position: absolute; top: calc(100% + 8px); right: 0;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px;
+  display: none; flex-direction: column; gap: 6px;
+  min-width: 240px; box-shadow: var(--shadow);
+  backdrop-filter: blur(20px); z-index: 200;
+}
+.theme-dropdown.show { display: flex; }
+.theme-dropdown h4 {
+  font-size: 0.75em; color: var(--text-secondary); text-transform: uppercase;
+  letter-spacing: 1px; padding: 4px 8px;
+}
+.theme-option {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; border-radius: 8px; cursor: pointer;
+  transition: all 0.2s ease; font-size: 0.88em; border: 1px solid transparent;
+}
+.theme-option:hover { background: var(--glass-hover); border-color: var(--accent-gold); }
+.theme-option.selected { background: rgba(240, 185, 11, 0.1); border-color: var(--accent-gold); }
+.theme-option .swatch { width: 24px; height: 24px; border-radius: 6px; flex-shrink: 0; }
+
+/* ===== Year Selector ===== */
+.year-select {
+  padding: 8px 16px; border-radius: 24px;
+  border: 1px solid var(--accent-gold); background: rgba(240, 185, 11, 0.08);
+  color: var(--accent-gold); font-size: 0.9em; font-weight: 700;
+  cursor: pointer; font-family: var(--font-display);
+  transition: all 0.3s ease; outline: none;
+}
+.year-select:hover { background: rgba(240, 185, 11, 0.15); }
+.year-select option { background: var(--bg-primary); color: var(--text-primary); }
+
+/* ===== Main Container ===== */
+.container { max-width: 980px; margin: 0 auto; padding: 32px 20px; }
+.header { text-align: center; margin-bottom: 36px; animation: fadeInDown 0.8s ease; }
+.header h1 { font-size: 2.4em; font-weight: 900; letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #fff 20%, var(--accent-gold) 50%, #ff6b35 80%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 8px; }
+.header .subtitle { font-size: 0.9em; color: var(--text-secondary); }
+
+/* ===== Form Card ===== */
+.form-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 32px; margin-bottom: 24px;
+  box-shadow: var(--shadow); backdrop-filter: blur(12px);
+  animation: fadeInUp 0.6s ease;
+}
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+.form-card .year-badge {
+  display: inline-block; padding: 4px 14px; border-radius: 20px;
+  font-size: 0.78em; font-weight: 800; margin-bottom: 20px;
+  letter-spacing: 1px; text-transform: uppercase;
+}
+.year-badge-2025 { background: rgba(52,152,219,0.15); color: var(--accent-blue); border: 1px solid rgba(52,152,219,0.3); }
+.year-badge-2026 { background: rgba(240,185,11,0.12); color: var(--accent-gold); border: 1px solid rgba(240,185,11,0.3); }
+
+/* Section Label */
+.section-label {
+  font-size: 0.82em; font-weight: 800; color: var(--accent-gold);
+  margin: 24px 0 13px; padding-bottom: 8px;
+  border-bottom: 2px solid rgba(240, 185, 11, 0.15);
+  letter-spacing: 1px; text-transform: uppercase;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 4px; }
+.form-group { margin-bottom: 15px; }
+.form-group label {
+  display: block; font-size: 0.82em; font-weight: 600;
+  color: var(--text-secondary); margin-bottom: 6px;
+  letter-spacing: 0.3px;
+}
+.form-group label .req { color: var(--accent-red); }
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; padding: 12px 16px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 0.93em; background: rgba(255,255,255,0.03);
+  color: var(--text-primary); font-family: var(--font-display);
+  transition: all 0.3s ease;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color: var(--accent-gold); outline: none;
+  background: rgba(240, 185, 11, 0.05); box-shadow: 0 0 0 3px rgba(240,185,11,0.08);
+}
+.form-group textarea { resize: vertical; min-height: 60px; }
+.form-group .hint { font-size: 0.73em; color: var(--text-secondary); margin-top: 4px; opacity: 0.7; }
+
+/* Buttons */
+.btn-primary {
+  width: 100%; padding: 15px; font-size: 1.05em; font-weight: 800;
+  border: none; border-radius: var(--radius-sm); cursor: pointer;
+  background: linear-gradient(135deg, var(--accent-gold), #e8a004);
+  color: #1a1a2e; letter-spacing: 0.5px;
+  transition: all 0.3s ease; font-family: var(--font-display);
+  position: relative; overflow: hidden;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(240, 185, 11, 0.3);
+}
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-primary::after {
+  content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.2) 50%, transparent 60%);
+  animation: shimmer 2s infinite;
+}
+@keyframes shimmer { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+
+/* Loading */
+.loading { display: none; text-align: center; padding: 48px; }
+.loading .spinner {
+  width: 52px; height: 52px; border: 3px solid var(--border);
+  border-top-color: var(--accent-gold); border-radius: 50%;
+  animation: spin 0.8s linear infinite; margin: 0 auto 20px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Error */
+.error-box { background: rgba(231,76,60,0.1); color: #e74c3c; padding: 16px;
+  border-radius: var(--radius-sm); margin-bottom: 16px; display: none;
+  border: 1px solid rgba(231,76,60,0.2); font-size: 0.9em; }
+
+/* Model Row */
+.model-row {
+  display: flex; align-items: center; gap: 10px; padding: 12px 16px;
+  background: var(--glass); border-radius: var(--radius-sm); margin-top: 12px;
+  font-size: 0.84em; color: var(--text-secondary);
+}
+.model-row select {
+  padding: 6px 12px; border: 1px solid var(--border); border-radius: 8px;
+  font-size: 0.9em; background: rgba(0,0,0,0.3); color: var(--text-primary);
+  min-width: 180px;
+}
+
+/* Report */
+.report { display: none; margin-top: 24px; animation: fadeInUp 0.5s ease; }
+.report-header {
+  background: linear-gradient(135deg, rgba(240,185,11,0.08), rgba(52,152,219,0.08));
+  border: 1px solid var(--border); border-radius: var(--radius) var(--radius) 0 0;
+  padding: 36px; text-align: center;
+}
+.report-header h2 { font-size: 1.5em; font-weight: 800; margin-bottom: 6px; }
+.report-header p { color: var(--text-secondary); font-size: 0.88em; }
+.report-body {
+  background: var(--bg-card); border: 1px solid var(--border); border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius); padding: 36px;
+}
+.report-body h3 {
+  font-size: 1.08em; color: var(--accent-gold); margin: 32px 0 14px;
+  padding-bottom: 8px; border-bottom: 2px solid rgba(240,185,11,0.12);
+  letter-spacing: 0.5px;
+}
+.report-body h3:first-child { margin-top: 0; }
+
+/* Info Table */
+.info-table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+.info-table td { padding: 9px 14px; border-bottom: 1px solid var(--border); font-size: 0.88em; }
+.info-table td:first-child { color: var(--text-secondary); font-weight: 600; width: 140px; text-align: right; padding-right: 16px; }
+.info-table td:last-child { text-align: left; }
+
+/* Analysis Box */
+.analysis-box {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 18px 22px; margin: 14px 0;
+  font-size: 0.88em; color: var(--text-secondary); line-height: 1.9;
+}
+.analysis-box p { margin-bottom: 4px; }
+
+/* School Table */
+.school-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.84em; }
+.school-table th {
+  background: rgba(240,185,11,0.06); padding: 13px 8px; text-align: center;
+  font-weight: 700; color: var(--accent-gold); border: 1px solid var(--border);
+  font-size: 0.8em; white-space: nowrap; letter-spacing: 0.3px;
+}
+.school-table td {
+  padding: 12px 8px; text-align: center; border: 1px solid var(--border);
+  vertical-align: middle; transition: background 0.2s ease;
+}
+.school-table td.col-school { text-align: left; min-width: 130px; }
+.school-table td.col-note { text-align: left; font-size: 0.83em; color: var(--text-secondary); max-width: 200px; }
+.school-table tr:hover td { background: var(--glass-hover); }
+
+/* Tags */
+.tag { display: inline-block; padding: 3px 12px; border-radius: 14px; font-size: 0.78em; font-weight: 800; min-width: 52px; text-align: center; letter-spacing: 0.3px; }
+.tag-chong { background: rgba(231,76,60,0.12); color: #e74c3c; border: 1px solid rgba(231,76,60,0.2); }
+.tag-chong2 { background: rgba(192,57,43,0.1); color: #c0392b; border: 1px solid rgba(192,57,43,0.15); }
+.tag-wen { background: rgba(241,196,15,0.1); color: #f1c40f; border: 1px solid rgba(241,196,15,0.2); }
+.tag-bao { background: rgba(46,204,113,0.1); color: #2ecc71; border: 1px solid rgba(46,204,113,0.2); }
+.tag-high { background: rgba(46,204,113,0.12); color: #27ae60; }
+.tag-mid { background: rgba(243,156,18,0.12); color: #f39c12; }
+.tag-low { background: rgba(231,76,60,0.12); color: #e74c3c; }
+
+/* Risk Box */
+.risk-box { background: rgba(231,76,60,0.05); border: 1px solid rgba(231,76,60,0.15); border-radius: var(--radius-sm); padding: 18px 22px; margin: 14px 0; font-size: 0.88em; }
+.risk-box ul { margin: 10px 0 0 18px; }
+.risk-box li { margin-bottom: 5px; color: var(--text-secondary); }
+
+/* Warning Banner */
+.warning-banner {
+  background: linear-gradient(135deg, rgba(231,76,60,0.08), rgba(243,156,18,0.08));
+  border: 1px solid rgba(231,76,60,0.2); border-radius: var(--radius-sm);
+  padding: 16px 20px; margin: 18px 0; font-size: 0.85em;
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.warning-banner .icon { font-size: 1.3em; flex-shrink: 0; }
+
+/* Footer */
+.footer-note { text-align: center; padding: 48px 20px; color: var(--text-secondary); font-size: 0.82em; opacity: 0.6; }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .form-row { grid-template-columns: 1fr; }
+  .header h1 { font-size: 1.7em; }
+  .school-table { font-size: 0.7em; }
+  .report-body { padding: 16px; }
+  .top-nav { padding: 10px 14px; }
+  .nav-controls { gap: 8px; }
+}
 </style>
 </head>
 <body>
-<div class="nav">
-  <span style="color:#64748b;font-size:0.9em">🎓 杭州中考志愿智能填报</span>
-</div>
 
+<!-- ===== Background Layers ===== -->
+<div class="bg-layer bg-nba-kobe active" id="bg0" data-name="Kobe Bryant (Lakers)"></div>
+<div class="bg-layer bg-nba-lebron" id="bg1" data-name="LeBron James (Lakers)"></div>
+<div class="bg-layer bg-nba-curry" id="bg2" data-name="Steph Curry (Warriors)"></div>
+<div class="bg-layer bg-star-wyb" id="bg3" data-name="王一博"></div>
+<div class="bg-layer bg-star-yyqx" id="bg4" data-name="易烊千玺"></div>
+<div class="bg-layer bg-anime-naruto" id="bg5" data-name="火影忍者"></div>
+<div class="bg-layer bg-anime-demon" id="bg6" data-name="鬼灭之刃"></div>
+<div class="bg-layer bg-anime-onepiece" id="bg7" data-name="海贼王"></div>
+
+<!-- ===== Particles ===== -->
+<div class="particles" id="particles"></div>
+
+<!-- ===== Top Nav ===== -->
+<nav class="top-nav">
+  <div class="logo">
+    <svg viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="5" stroke="#f0b90b" stroke-width="2"/><text x="7" y="20" fill="#f0b90b" font-size="15" font-weight="900">中</text></svg>
+    杭州中考志愿 · 智能填报
+  </div>
+  <div class="nav-controls">
+    <!-- Year Selector -->
+    <select class="year-select" id="yearSelect" onchange="switchYear(this.value)">
+      <option value="2026" selected>📅 2026年 中考</option>
+      <option value="2025">📅 2025年 中考</option>
+    </select>
+    <!-- BG Theme Picker -->
+    <div class="theme-picker">
+      <button class="theme-btn" id="themeBtn" onclick="toggleThemeDropdown()">
+        <span class="dot" id="themeDot" style="background:linear-gradient(135deg,#552B84,#FDB927)"></span>
+        🎨 换背景
+      </button>
+      <div class="theme-dropdown" id="themeDropdown">
+        <h4>🏀 NBA名人堂</h4>
+        <div class="theme-option selected" onclick="switchBg(0,this)" data-bg="0">
+          <span class="swatch" style="background:linear-gradient(135deg,#552B84,#FDB927)"></span> Kobe Bryant
+        </div>
+        <div class="theme-option" onclick="switchBg(1,this)" data-bg="1">
+          <span class="swatch" style="background:linear-gradient(135deg,#86022D,#FDB927)"></span> LeBron James
+        </div>
+        <div class="theme-option" onclick="switchBg(2,this)" data-bg="2">
+          <span class="swatch" style="background:linear-gradient(135deg,#0068BB,#FDB927)"></span> Steph Curry
+        </div>
+        <h4>🌟 中国主流明星</h4>
+        <div class="theme-option" onclick="switchBg(3,this)" data-bg="3">
+          <span class="swatch" style="background:linear-gradient(135deg,#FF2048,#000)"></span> 王一博
+        </div>
+        <div class="theme-option" onclick="switchBg(4,this)" data-bg="4">
+          <span class="swatch" style="background:linear-gradient(135deg,#006400,#FF4500)"></span> 易烊千玺
+        </div>
+        <h4>🎬 动漫主角</h4>
+        <div class="theme-option" onclick="switchBg(5,this)" data-bg="5">
+          <span class="swatch" style="background:linear-gradient(135deg,#FF6B00,#001F3F)"></span> 火影忍者
+        </div>
+        <div class="theme-option" onclick="switchBg(6,this)" data-bg="6">
+          <span class="swatch" style="background:linear-gradient(135deg,#000,#9E1F2C)"></span> 鬼灭之刃
+        </div>
+        <div class="theme-option" onclick="switchBg(7,this)" data-bg="7">
+          <span class="swatch" style="background:linear-gradient(135deg,#0064BA,#E8A822)"></span> 海贼王
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== Main Content ===== -->
 <div class="container">
   <div class="header">
-    <h1>🎓 中考志愿智能填报</h1>
-    <p>填入成绩 → AI深度分析 → 生成冲/稳/保志愿方案</p>
-  </div>
-
-  <div class="info-bar">
-    <div class="dot"></div>
-    <span>基于智谱AI GLM-4-Flash · 2026年杭州中考数据 · 分配生政策评估 · 个性化方案</span>
+    <h1>🎯 中考志愿智能填报</h1>
+    <p class="subtitle">基于分差计算冲稳保 · 2025验证优化 · 2026全新预测</p>
   </div>
 
   <div class="form-card">
-    <h2>📝 基本信息</h2>
+    <div class="year-badge year-badge-2026" id="yearBadge">📅 2026年 · 分配生20.5% · 9021名额</div>
+
     <div class="form-row">
-      <div class="form-group">
-        <label>昵称 <span class="opt">(选填)</span></label>
-        <input type="text" id="nickname" placeholder="如：小明">
-      </div>
-      <div class="form-group">
-        <label>杭州地区所在中学名称 <span style="color:#dc2626">*</span></label>
-        <input type="text" id="schoolName" placeholder="如：杭州市十三中教育集团" required>
-        <div class="hint">用于评估该校分配生配额及历年录取情况</div>
-      </div>
+      <div class="form-group"><label>👤 昵称</label><input type="text" id="nickname" placeholder="如：小明"></div>
+      <div class="form-group"><label>🏫 所在中学 <span class="req">*</span></label><input type="text" id="schoolName" placeholder="如：杭州市十三中教育集团" required></div>
     </div>
 
     <div class="section-label">📊 一模成绩</div>
     <div class="form-row">
-      <div class="form-group">
-        <label>一模成绩（分）<span style="color:#dc2626">*</span></label>
-        <input type="number" id="mock1Score" placeholder="如：568" step="0.1" required>
-      </div>
-      <div class="form-group">
-        <label>一模年排 <span class="opt">(选填)</span></label>
-        <input type="number" id="mock1Rank" placeholder="如：120">
-        <div class="hint">年级排名，用于分配生资格评估</div>
-      </div>
+      <div class="form-group"><label>分数 <span class="req">*</span></label><input type="number" id="mock1Score" step="0.1" required></div>
+      <div class="form-group"><label>年排 <span style="color:var(--text-secondary);font-weight:400">(选填)</span></label><input type="number" id="mock1Rank"><div class="hint">校内年级排名</div></div>
     </div>
 
     <div class="section-label">📊 二模成绩</div>
     <div class="form-row">
-      <div class="form-group">
-        <label>二模成绩（分）<span style="color:#dc2626">*</span></label>
-        <input type="number" id="mock2Score" placeholder="如：576.5" step="0.1" required>
-      </div>
-      <div class="form-group">
-        <label>二模年排 <span class="opt">(选填)</span></label>
-        <input type="number" id="mock2Rank" placeholder="如：76">
-        <div class="hint">年级排名，用于分配生资格评估</div>
-      </div>
+      <div class="form-group"><label>分数 <span class="req">*</span></label><input type="number" id="mock2Score" step="0.1" required></div>
+      <div class="form-group"><label>年排 <span style="color:var(--text-secondary);font-weight:400">(选填)</span></label><input type="number" id="mock2Rank"><div class="hint">校内年级排名</div></div>
     </div>
 
     <div class="section-label">🏠 志愿偏好</div>
     <div class="form-row">
-      <div class="form-group">
-        <label>目标学校/偏好 <span class="opt">(选填)</span></label>
-        <textarea id="targets" placeholder="如：想冲杭二中，理科强，希望校风好"></textarea>
-      </div>
-      <div class="form-group">
-        <label>家庭地址 <span class="opt">(选填)</span></label>
-        <input type="text" id="homeAddress" placeholder="如：西湖区文三路XX小区">
-        <div class="hint">用于评估通勤距离和就近学校推荐</div>
-      </div>
+      <div class="form-group"><label>家庭地址 <span style="color:var(--text-secondary);font-weight:400">(选填)</span></label><input type="text" id="homeAddress" placeholder="西湖区文三路XX小区"></div>
+      <div class="form-group"><label>💭 目标/偏好</label><textarea id="targets" placeholder="如：想冲杭二中，理科强"></textarea></div>
     </div>
-    <div class="form-group">
-      <label>是否住校</label>
-      <select id="boarding">
-        <option value="不限">不限</option>
-        <option value="是">希望住校</option>
-        <option value="否">希望走读（不住校）</option>
+    <div class="form-row">
+      <div class="form-group"><label>住校偏好</label><select id="boarding"><option value="不限">不限</option><option value="住宿">住宿（可住校）</option><option value="不住宿">不住宿（通勤优先）</option></select></div>
+      <div class="form-group"><label>👥 学籍人数</label><input type="number" id="studentCount" placeholder="如：460"><div class="hint">默认按相应年份分配比例估算</div></div>
+    </div>
+
+    <div class="model-row">
+      <span>🤖 模型：</span>
+      <select id="modelSelect" onchange="onModelChange()">
+        <optgroup label="智谱AI（已配置·免费）">
+          <option value="zhipu|glm-4-flash">GLM-4-Flash（快速·默认）</option>
+        </optgroup>
+        <optgroup label="硅基流动 SiliconFlow（已配置·免费）">
+          <option value="siliconflow|deepseek-ai/DeepSeek-R1">DeepSeek-R1（推理强）</option>
+          <option value="siliconflow|Qwen/Qwen3-8B">Qwen3-8B（中文好）</option>
+        </optgroup>
       </select>
     </div>
-
-    <details class="optional-section" id="optionalSection">
-      <summary>📋 补充成绩（选填，填写越多分析越精准）</summary>
-      <div class="form-row">
-        <div class="form-group">
-          <label>八下期末成绩（分）</label>
-          <input type="number" id="grade8bScore" placeholder="如：545" step="0.1">
-        </div>
-        <div class="form-group">
-          <label>八下年排</label>
-          <input type="number" id="grade8bRank" placeholder="如：150">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>九上期末成绩（分）</label>
-          <input type="number" id="grade9aScore" placeholder="如：560" step="0.1">
-        </div>
-        <div class="form-group">
-          <label>九上年排</label>
-          <input type="number" id="grade9aRank" placeholder="如：100">
-        </div>
-      </div>
-    </details>
-
-    <button class="btn-submit" id="submitBtn" onclick="generatePlan()">
-      🤖 AI 生成志愿方案
-    </button>
-  </div>
-
-  <div class="error" id="errorBox"></div>
-
-  <div class="loading" id="loadingBox">
-    <div class="spinner"></div>
-    <p>AI 正在综合分析你的成绩趋势...</p>
-    <p style="font-size:0.82em;color:#94a3b8">预计需要 8-12 秒</p>
-  </div>
-
-  <div class="result-card" id="resultBox">
-    <h2>📋 AI 个性化志愿方案</h2>
-    <div class="result-content" id="resultContent"></div>
-    <div style="margin-top:20px;padding-top:16px;border-top:1px solid #e2e8f0;font-size:0.8em;color:#94a3b8">
-      ⚠️ 本方案由AI生成，仅供参考。实际志愿填报请咨询学校老师，结合官方政策和最新数据。
+    <div class="model-row" id="apiKeyRow" style="display:none">
+      <span>🔑 硅基流动Key：</span>
+      <input type="password" id="apiKeyInput" placeholder="输入API Key" style="flex:1;padding:6px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.88em;background:rgba(0,0,0,0.3);color:var(--text-primary)">
+      <button onclick="saveApiKey()" style="padding:6px 14px;background:var(--accent-gold);color:#1a1a2e;border:none;border-radius:8px;cursor:pointer;font-size:0.85em;font-weight:700">💾 保存</button>
+      <span id="keyStatus" style="font-size:0.78em;color:var(--text-secondary)"></span>
     </div>
+    <div class="model-row" style="gap:4px;font-size:0.76em;color:var(--text-secondary);padding-top:0;opacity:0.6">
+      <span>💡 先选模型，再点生成。Key仅存本地浏览器。</span>
+    </div>
+    <button class="btn-primary" id="submitBtn" onclick="generate()">🚀 生成志愿方案</button>
+  </div>
+
+  <div class="error-box" id="errorBox"></div>
+  <div class="loading" id="loadingBox"><div class="spinner"></div><p style="color:var(--text-secondary)">AI 正在撰写推荐理由...</p></div>
+
+  <div class="report" id="reportBox">
+    <div class="report-header"><h2 id="reportTitle">中考志愿填报方案</h2><p>hangzhou-zhongkao-advisor v4.0</p></div>
+    <div class="report-body" id="reportBody"></div>
   </div>
 </div>
 
-<div class="footer">
-  <p>Powered by 智谱AI GLM-4-Flash · 2026年杭州中考数据分析</p>
-</div>
+<div class="footer-note"><p>前端计算(36校+分配生公式+分差冲稳保+密集段警告) + AI推荐 · v4.0</p></div>
 
+<!-- ===== Script ===== -->
 <script>
-// ==================== 调用API ====================
-async function generatePlan() {
-    const mock1Score = document.getElementById('mock1Score').value;
-    const mock2Score = document.getElementById('mock2Score').value;
-    const schoolName = document.getElementById('schoolName').value;
+// ==================== Year-specific Knowledge Bases ====================
+var CURRENT_YEAR = '2026';
 
-    if (!mock1Score && !mock2Score) {
-        showError('请至少填写一模或二模成绩');
-        return;
-    }
-    if (!schoolName) {
-        showError('请填写所在中学名称');
-        return;
-    }
+// 2025年数据
+var KB_2025 = {
+  pred: { yd: 563, zg: 617, q3: 627 },
+  allocation_ratio: 0.194,
+  allocation_total: 8004,
+  total_students: 41258,
+  top3_ratio: 0.034,
+  top8_ratio: 0.09,
+  schedule: '志愿填报: 5月30日-31日 | 中考: 6月21日-22日',
+  policy_note: '分配生比例从60%升至70%',
+  schools: [
+    {n:"杭二滨江",t:1,tn:"T1前三",s:630,b:"是",d:"滨江区",g:"杭二中",a:"东信大道76号",m:"4号线联庄站"},
+    {n:"学军西溪",t:1,tn:"T1前三",s:629,b:"部分",d:"西湖区",g:"学军",a:"文三路188号",m:"2号线学院路站"},
+    {n:"杭高贡院",t:1,tn:"T1前三",s:627,b:"是",d:"拱墅区",g:"杭高",a:"凤起路238号",m:"1/2号线凤起路站"},
+    {n:"杭十四凤起",t:2,tn:"T2重高",s:624,b:"部分",d:"拱墅区",g:"杭十四",a:"凤起路580号",m:"1/2号线凤起路站"},
+    {n:"学军紫金港",t:2,tn:"T2重高",s:623,b:"是",d:"西湖区",g:"学军",a:"萍水西街100号",m:"2号线三坝站",note:"2025首进前八"},
+    {n:"余杭高级中学",t:2,tn:"T2区属",s:623,b:"是",d:"临平区",note:"区属优质高中"},
+    {n:"杭四下沙",t:2,tn:"T2重高",s:622,b:"是",d:"钱塘区",g:"杭四中",a:"下沙6号大街436号",m:"1号线文海南路站"},
+    {n:"萧山中学",t:2,tn:"T2区属",s:621,b:"是",d:"萧山区"},
+    {n:"浙大玉泉",t:2,tn:"T2重高",s:620,b:"否",d:"西湖区",g:"浙大附中",a:"曙光路89号"},
+    {n:"长河高中",t:2,tn:"T2重高",s:619,b:"是",d:"滨江区",a:"滨文路227号",m:"5号线聚才路站"},
+    {n:"杭师大附中",t:3,tn:"T3优高",s:617,b:"是",d:"西湖区",a:"振华路5号",m:"2号线墩祥街站"},
+    {n:"杭高钱江",t:3,tn:"T3优高",s:617,b:"是",d:"钱塘区",g:"杭高"},
+    {n:"富阳中学",t:3,tn:"T3区属",s:617,b:"是",d:"富阳区"},
+    {n:"学军海创园",t:3,tn:"T3优高",s:615,b:"是",d:"余杭区",g:"学军"},
+    {n:"杭二钱江",t:3,tn:"T3优高",s:615,b:"是",d:"钱塘区",g:"杭二中"},
+    {n:"杭十四康桥",t:3,tn:"T3优高",s:612,b:"是",d:"拱墅区",g:"杭十四",a:"龙腾街500号",m:"4号线储运路站"},
+    {n:"余杭第二高级",t:3,tn:"T3区属",s:611,b:"是",d:"余杭区"},
+    {n:"浙大丁兰",t:3,tn:"T3优高",s:610,b:"是",d:"上城区",g:"浙大附中"},
+    {n:"源清中学",t:3,tn:"T3优高",s:607,b:"是",d:"拱墅区",a:"湖州街69号",m:"5号线善贤站"},
+    {n:"杭十四青山湖",t:3,tn:"T3优高",s:606,b:"是",d:"临安区",g:"杭十四"},
+    {n:"杭高钱塘",t:3,tn:"T3优高",s:605,b:"是",d:"钱塘区",g:"杭高"},
+    {n:"杭高临平",t:3,tn:"T3优高",s:603,b:"是",d:"临平区",g:"杭高"},
+    {n:"杭二东河",t:3,tn:"T3优高",s:602,b:"否",d:"上城区",g:"杭二中",a:"建国中路36号",m:"5号线万安桥站",note:"有首创班"},
+    {n:"杭四江东",t:3,tn:"T3优高",s:596,b:"是",d:"钱塘区",g:"杭四中"},
+    {n:"杭二富春",t:3,tn:"T3优高",s:596,b:"是",d:"富阳区",g:"杭二中"},
+    {n:"杭七中转塘",t:3,tn:"T3优高",s:594,b:"是",d:"西湖区"},
+    {n:"杭师大附二中",t:3,tn:"T3优高",s:594,b:"是",d:"西湖区"},
+    {n:"学军桐庐",t:3,tn:"T3优高",s:591,b:"是",d:"桐庐县",g:"学军"},
+    {n:"长河二中",t:3,tn:"T3优高",s:589,b:"是",d:"钱塘区"},
+    {n:"源清二中",t:3,tn:"T3优高",s:588,b:"是",d:"拱墅区"},
+    {n:"西湖高中",t:3,tn:"T3优高",s:587,b:"否",d:"西湖区"},
+    {n:"杭四吴山",t:3,tn:"T3优高",s:586,b:"否",d:"上城区",g:"杭四中",a:"吴山路128号",m:"1号线定安路站"},
+  ]
+};
 
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.textContent = '⏳ AI 深度分析中...';
-    document.getElementById('errorBox').style.display = 'none';
-    document.getElementById('resultBox').style.display = 'none';
-    document.getElementById('loadingBox').style.display = 'block';
+// 2026年数据
+var KB_2026 = {
+  pred: { yd: 565, zg: 617, q3: 628 },
+  allocation_ratio: 0.205,
+  allocation_total: 9021,
+  total_students: 44000,
+  top3_ratio: 0.032,
+  top8_ratio: 0.083,
+  schedule: '志愿填报: 5月29日-30日 | 中考: 6月20日-21日',
+  policy_note: '新增: 杭二高新+浙大附实验+4所县中首招 · 7校扩招 · 分配生+1017名额',
+  schools: [
+    {n:"杭二滨江",t:1,tn:"T1前三",s:631,b:"是",d:"滨江区",g:"杭二中",a:"东信大道76号",m:"4号线联庄站",note:"预测+1 (2025:630)"},
+    {n:"学军西溪",t:1,tn:"T1前三",s:630,b:"部分",d:"西湖区",g:"学军",a:"文三路188号",m:"2号线学院路站",note:"预测+1 (2025:629)"},
+    {n:"杭高贡院",t:1,tn:"T1前三",s:628,b:"是",d:"拱墅区",g:"杭高",a:"凤起路238号",m:"1/2号线凤起路站",note:"预测+1"},
+    {n:"杭十四凤起",t:2,tn:"T2重高",s:625,b:"部分",d:"拱墅区",g:"杭十四",a:"凤起路580号",m:"1/2号线凤起路站",note:"预测+1"},
+    {n:"学军紫金港",t:2,tn:"T2重高",s:624,b:"是",d:"西湖区",g:"学军",a:"萍水西街100号",m:"2号线三坝站",note:"预测+1，看涨"},
+    {n:"杭四下沙",t:2,tn:"T2重高",s:623,b:"是",d:"钱塘区",g:"杭四中",a:"下沙6号大街436号",m:"1号线文海南路站",note:"预测+1"},
+    {n:"浙大玉泉",t:2,tn:"T2重高",s:621,b:"否",d:"西湖区",g:"浙大附中",a:"曙光路89号",note:"预测+1"},
+    {n:"长河高中",t:2,tn:"T2重高",s:620,b:"是",d:"滨江区",a:"滨文路227号",m:"5号线聚才路站",note:"预测+1"},
+    {n:"杭师大附中",t:3,tn:"T3优高",s:618,b:"是",d:"西湖区",a:"振华路5号",m:"2号线墩祥街站",note:"预测+1，扩招+192"},
+    {n:"杭高钱江",t:3,tn:"T3优高",s:617,b:"是",d:"钱塘区",g:"杭高"},
+    {n:"学军海创园",t:3,tn:"T3优高",s:615,b:"是",d:"余杭区",g:"学军",note:"扩招+48"},
+    {n:"杭二钱江",t:3,tn:"T3优高",s:615,b:"是",d:"钱塘区",g:"杭二中"},
+    {n:"杭十四康桥",t:3,tn:"T3优高",s:612,b:"是",d:"拱墅区",g:"杭十四",a:"龙腾街500号",m:"4号线储运路站",note:"扩招+96"},
+    {n:"浙大丁兰",t:3,tn:"T3优高",s:610,b:"是",d:"上城区",g:"浙大附中"},
+    {n:"源清中学",t:3,tn:"T3优高",s:607,b:"是",d:"拱墅区",a:"湖州街69号",m:"5号线善贤站"},
+    {n:"杭高钱塘",t:3,tn:"T3优高",s:605,b:"是",d:"钱塘区",g:"杭高",note:"扩招+96"},
+    {n:"杭二高新(新)",t:3,tn:"2026新校",s:603,b:"是",d:"",g:"杭二中",note:"2026新增·杭二中集团·招864人"},
+    {n:"杭二东河",t:3,tn:"T3优高",s:602,b:"否",d:"上城区",g:"杭二中",a:"建国中路36号",m:"5号线万安桥站",note:"有首创班"},
+    {n:"浙大附实验(新)",t:3,tn:"2026新校",s:598,b:"是",d:"",g:"浙大附中",note:"2026新增·浙大附集团·招672人"},
+    {n:"杭四江东",t:3,tn:"T3优高",s:596,b:"是",d:"钱塘区",g:"杭四中"},
+    {n:"杭二富春",t:3,tn:"T3优高",s:596,b:"是",d:"富阳区",g:"杭二中"},
+    {n:"杭七中转塘",t:3,tn:"T3优高",s:594,b:"是",d:"西湖区"},
+    {n:"杭师大附二中",t:3,tn:"T3优高",s:594,b:"是",d:"西湖区",note:"扩招+192"},
+    {n:"学军桐庐",t:3,tn:"T3优高",s:591,b:"是",d:"桐庐县",g:"学军"},
+    {n:"长河二中",t:3,tn:"T3优高",s:589,b:"是",d:"钱塘区",note:"扩招+96"},
+    {n:"源清二中",t:3,tn:"T3优高",s:588,b:"是",d:"拱墅区",note:"扩招+144"},
+    {n:"西湖高中",t:3,tn:"T3优高",s:587,b:"否",d:"西湖区"},
+    {n:"杭四吴山",t:3,tn:"T3优高",s:586,b:"否",d:"上城区",g:"杭四中",a:"吴山路128号",m:"1号线定安路站"},
+    {n:"淳安中学(新)",t:3,tn:"2026县中",s:573,b:"是",d:"淳安县",note:"首招主城区·可抄底"},
+    {n:"严州中学(新)",t:3,tn:"2026县中",s:570,b:"是",d:"建德市",note:"首招主城区"},
+    {n:"建德新中(新)",t:3,tn:"2026县中",s:567,b:"是",d:"建德市",note:"首招主城区"},
+  ]
+};
 
-    const payload = {
-        nickname: document.getElementById('nickname').value || '',
-        schoolName: schoolName,
-        mock1Score: mock1Score ? parseFloat(mock1Score) : null,
-        mock1Rank: document.getElementById('mock1Rank').value ? parseInt(document.getElementById('mock1Rank').value) : null,
-        mock2Score: mock2Score ? parseFloat(mock2Score) : null,
-        mock2Rank: document.getElementById('mock2Rank').value ? parseInt(document.getElementById('mock2Rank').value) : null,
-        targets: document.getElementById('targets').value || '',
-        homeAddress: document.getElementById('homeAddress').value || '',
-        boarding: document.getElementById('boarding').value || '不限',
-        grade8bScore: document.getElementById('grade8bScore').value ? parseFloat(document.getElementById('grade8bScore').value) : null,
-        grade8bRank: document.getElementById('grade8bRank').value ? parseInt(document.getElementById('grade8bRank').value) : null,
-        grade9aScore: document.getElementById('grade9aScore').value ? parseFloat(document.getElementById('grade9aScore').value) : null,
-        grade9aRank: document.getElementById('grade9aRank').value ? parseInt(document.getElementById('grade9aRank').value) : null,
-    };
+// Active KB
+var KB, PRED, S;
 
-    try {
-        const response = await fetch('/api/zhongkao', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-
-        const data = await response.json();
-
-        if (!response.ok || data.error) {
-            throw new Error(data.error || '请求失败');
-        }
-
-        document.getElementById('loadingBox').style.display = 'none';
-        document.getElementById('resultBox').style.display = 'block';
-        document.getElementById('resultContent').innerHTML = formatMarkdown(data.result);
-
-    } catch (error) {
-        document.getElementById('loadingBox').style.display = 'none';
-        showError(error.message || '服务异常，请稍后重试');
-    } finally {
-        btn.disabled = false;
-        btn.textContent = '🤖 AI 生成志愿方案';
-    }
+function switchYear(year) {
+  CURRENT_YEAR = year;
+  if (year === '2025') { KB = KB_2025; }
+  else { KB = KB_2026; }
+  PRED = KB.pred;
+  S = KB.schools;
+  
+  // Update badge
+  var badge = document.getElementById('yearBadge');
+  if (year === '2025') {
+    badge.textContent = '📅 2025年 · 分配生19.4% · 8004名额';
+    badge.className = 'year-badge year-badge-2025';
+  } else {
+    badge.textContent = '📅 2026年 · 分配生20.5% · 9021名额';
+    badge.className = 'year-badge year-badge-2026';
+  }
+  // Hide previous report
+  document.getElementById('reportBox').style.display = 'none';
 }
 
-// ==================== Markdown渲染 ====================
-function formatMarkdown(text) {
-    if (!text) return '<p>暂无结果</p>';
-    let html = text
-        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-        .replace(/^### (.+)$/gm, '<h3 style="color:#0f172a;margin:16px 0 8px">$1</h3>')
-        .replace(/^## (.+)$/gm, '<h3 style="color:#0f172a;margin:16px 0 8px;font-size:1.15em">$1</h3>')
-        .replace(/^# (.+)$/gm, '<h2 style="color:#0f172a;margin:20px 0 10px">$1</h2>')
-        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\n\|(.+)\|/g, (m, row) => {
-            const cells = row.split('|').map(c => c.trim());
-            return '\n<tr>' + cells.map(c => `<td>${c}</td>`).join('') + '</tr>';
-        })
-        .replace(/^- (.+)$/gm, '<li>$1</li>')
-        .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
-        .replace(/\n\n/g, '</p><p>')
-        .replace(/\n/g, '<br>');
-    return '<p>' + html + '</p>';
+// Init with 2026
+switchYear('2026');
+
+// ==================== Dynamic Background System ====================
+var currentBg = 0;
+function switchBg(idx, el) {
+  if (currentBg === idx) return;
+  document.getElementById('bg'+currentBg).classList.remove('active');
+  document.getElementById('bg'+idx).classList.add('active');
+  currentBg = idx;
+  
+  // Update theme button dot
+  var swatches = el.querySelector('.swatch');
+  document.getElementById('themeDot').style.background = swatches.style.background;
+  
+  // Update selection
+  document.querySelectorAll('.theme-option').forEach(function(o){ o.classList.remove('selected'); });
+  el.classList.add('selected');
+  
+  // Close dropdown
+  document.getElementById('themeDropdown').classList.remove('show');
+}
+
+function toggleThemeDropdown() {
+  document.getElementById('themeDropdown').classList.toggle('show');
+}
+
+// Close dropdown on outside click
+document.addEventListener('click', function(e) {
+  var dd = document.getElementById('themeDropdown');
+  var btn = document.getElementById('themeBtn');
+  if (!dd.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+    dd.classList.remove('show');
+  }
+});
+
+// ==================== Particle System ====================
+(function initParticles() {
+  var container = document.getElementById('particles');
+  for (var i=0; i<35; i++) {
+    var p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random()*100+'%';
+    p.style.width = p.style.height = (2+Math.random()*4)+'px';
+    p.style.background = ['#f0b90b','#e74c3c','#3498db','#9b59b6','#2ecc71'][Math.floor(Math.random()*5)];
+    p.style.animationDuration = (6+Math.random()*8)+'s';
+    p.style.animationDelay = (Math.random()*5)+'s';
+    container.appendChild(p);
+  }
+})();
+
+// ==================== Classification ====================
+function classifySchool(sch, estScore) {
+  var diff = estScore - sch.s;
+  if (estScore >= PRED.q3) {
+    if(diff >= 5) return '保';
+    if(diff >= -5) return '稳';
+    if(diff >= -15) return '冲';
+    return '冲(难)';
+  }
+  if (estScore >= PRED.zg) {
+    if(diff >= 10) return '保';
+    if(diff >= -5) return '稳';
+    if(diff >= -20) return '冲';
+    return '冲(难)';
+  }
+  if (estScore >= PRED.yg) {
+    if(diff >= 15) return '保';
+    if(diff >= -5) return '稳';
+    if(diff >= -25) return '冲';
+    return '冲(难)';
+  }
+  if (estScore >= PRED.yd) {
+    if(diff >= 20) return '保(极稳)';
+    if(diff >= 8) return '保';
+    if(diff >= -10) return '稳';
+    if(diff >= -30) return '冲';
+    return '冲(难)';
+  }
+  if(diff >= 25) return '保(极稳)';
+  if(diff >= 10) return '保';
+  if(diff >= -10) return '稳';
+  return '冲';
+}
+
+// ==================== School Picking ====================
+function pickAllocation(schools, bestRank, totalQ, top3Q, top8Q) {
+  var chong=[], wen=[], bao=[];
+  schools.forEach(function(s){
+    if(s.type==='冲'||s.type==='冲(难)') chong.push(s);
+    else if(s.type==='稳') wen.push(s);
+    else bao.push(s);
+  });
+  chong.sort(function(a,b){return a.s-b.s;}); // 低→高 (closest to steady)
+  wen.sort(function(a,b){return b.s-a.s;});
+  bao.sort(function(a,b){return b.s-a.s;});
+
+  var plan=[];
+  // U2: 冲幅提升 → 取分数最低的2-3个冲
+  var rushTake = estScore >= PRED.zg ? 3 : 2;
+  plan = plan.concat(chong.slice(0, rushTake).map(function(s){return {type:'冲',s:s};}));
+  // 稳取2-3个
+  plan = plan.concat(wen.slice(0, 2).map(function(s){return {type:'稳',s:s};}));
+  // U3: 强制保底
+  if (bao.length) plan.push({type:'保',s:bao[0]});
+
+  // Unique
+  var used={}, final=[];
+  plan.forEach(function(e){if(!used[e.s.n]){used[e.s.n]=true;final.push(e);}});
+  
+  // Fill to 5
+  var remaining = schools.filter(function(s){return !used[s.n];});
+  remaining.sort(function(a,b){return b.s-a.s;});
+  for(var i=0;i<remaining.length&&final.length<5;i++){
+    if(!used[remaining[i].n]){
+      final.push({type:remaining[i].type,s:remaining[i]});
+      used[remaining[i].n]=true;
+    }
+  }
+  final.sort(function(a,b){return b.s.s-a.s.s;});
+  return {slots:final.slice(0,5), totalQ:totalQ, top3Q:top3Q, top8Q:top8Q};
+}
+
+function pickNakedExam(schools) {
+  var chong=[], wen=[], bao=[];
+  schools.forEach(function(s){
+    var t=s.type;
+    if(t==='冲'||t==='冲(难)') chong.push(s);
+    else if(t==='稳') wen.push(s);
+    else bao.push(s);
+  });
+  var plan=[];
+  // 冲→取最接近稳的3所
+  chong.sort(function(a,b){return a.s-b.s;});
+  plan = plan.concat(chong.slice(0,3).reverse());
+  plan = plan.concat(wen);
+  bao.sort(function(a,b){return b.s-a.s;});
+  plan = plan.concat(bao.slice(0,3));
+
+  plan.sort(function(a,b){return b.s-a.s;});
+  plan = plan.slice(0,10);
+  
+  // U4: 密集段警告 - 在620-625分段间距至少3-5分
+  var denseWarning = false;
+  for (var i=1; i<plan.length; i++) {
+    if (plan[i-1].s >= 620 && plan[i].s >= 619 && (plan[i-1].s - plan[i].s) <= 2) {
+      denseWarning = true;
+    }
+  }
+  
+  return {slots:plan.map(function(s,i){return {i:i+1,type:s.type,s:s};}), denseWarning:denseWarning};
+}
+
+// ==================== Compute ====================
+function compute(data) {
+  var sc = data.studentCount || 400;
+  var ratio = KB.allocation_ratio;
+  var totalQ = Math.round(sc * ratio);
+  var top3Q = Math.round(sc * KB.top3_ratio);
+  var top8Q = Math.round(sc * KB.top8_ratio);
+  var bestScore = data.mock2Score || data.mock1Score;
+  var bestRank = data.mock2Rank || data.mock1Rank;
+  var estScore = bestScore + 28;
+  var trend = data.mock1Score && data.mock2Score ? (data.mock2Score-data.mock1Score) : null;
+
+  var all = [];
+  S.forEach(function(sch){
+    if(!sch.s) return;
+    var type = classifySchool(sch, estScore);
+    if(data.boarding==='住宿' && sch.b==='否') return;  // 选住宿：过滤掉不住校的学校
+    if(data.boarding==='不住宿' && sch.b==='是' && data.homeAddress && sch.a) return; // 选不住宿+有家庭地址：优先附近
+    all.push({
+      n:sch.n, t:sch.t, tn:sch.tn, s:sch.s, b:sch.b, d:sch.d,
+      a:sch.a||'', m:sch.m||'', note:sch.note||'',
+      diff:(estScore-sch.s).toFixed(0), type:type
+    });
+  });
+  all.sort(function(a,b){return b.s - a.s;});
+
+  var allocPlan = pickAllocation(all, bestRank, totalQ, top3Q, top8Q);
+  var nkPlan = pickNakedExam(all);
+
+  var allocProb='?', top3Prob='?';
+  if(bestRank && sc){
+    allocProb = bestRank<=totalQ?'高':(bestRank<=Math.round(totalQ*1.35)?'中':'低');
+    top3Prob = bestRank<=top3Q?'高':(bestRank<=top3Q*2?'中':'低');
+  }
+
+  return {
+    totalQ:totalQ, top3Q:top3Q, top8Q:top8Q,
+    bestScore:bestScore, bestRank:bestRank, estScore:estScore, trend:trend,
+    allocProb:allocProb, top3Prob:top3Prob,
+    allocPlan:allocPlan, nkPlan:nkPlan, all:all
+  };
+}
+
+// ==================== Render Report ====================
+function renderReport(data, calc, aiText) {
+  var sn = data.schoolName, nick = data.nickname||'考生';
+  var h = '';
+  document.getElementById('reportTitle').textContent = nick+' — '+sn+' 中考志愿方案';
+
+  // 一、基本信息
+  h+='<h3>💡 一、考生基本信息</h3><table class="info-table">';
+  h+='<tr><td>初中学校</td><td><strong>'+sn+'</strong></td></tr>';
+  if(data.studentCount) h+='<tr><td>学籍人数</td><td>'+data.studentCount+'人</td></tr>';
+  h+='<tr><td>分配生资格</td><td>待评估（应届+综合素质3A）</td></tr>';
+  if(data.mock1Score) h+='<tr><td>一模</td><td>'+data.mock1Score+'分'+(data.mock1Rank?' (年排'+data.mock1Rank+')':'')+'</td></tr>';
+  if(data.mock2Score) h+='<tr><td>二模</td><td>'+data.mock2Score+'分'+(data.mock2Rank?' (年排'+data.mock2Rank+')':'')+'</td></tr>';
+  if(calc.trend!=null) h+='<tr><td>模考趋势</td><td>'+(calc.trend>0?'📈 上涨 '+calc.trend+'分':calc.trend<0?'📉 下降 '+Math.abs(calc.trend)+'分':'➡ 持平')+'</td></tr>';
+  h+='<tr><td>预估中考</td><td><strong>'+(calc.estScore-5)+'~'+(calc.estScore+5)+'分</strong>（模考+25~30修正）</td></tr>';
+  h+='<tr><td>住校</td><td>'+data.boarding+'</td></tr>';
+  if(data.homeAddress) h+='<tr><td>地址</td><td>'+data.homeAddress+'</td></tr>';
+  if(data.targets) h+='<tr><td>目标</td><td>'+data.targets+'</td></tr>';
+  h+='</table>';
+
+  // 二、定位
+  h+='<h3>📏 二、成绩定位</h3><div class="analysis-box">';
+  h+='<p>📊 模考最佳<strong>'+calc.bestScore+'分</strong>，预估中考约 <strong>'+(calc.estScore-5)+'~'+(calc.estScore+5)+'分</strong></p>';
+  var es=calc.estScore;
+  h+='<p>vs '+CURRENT_YEAR+'年预测线：一段<strong>'+PRED.yd+'</strong>('+(es>PRED.yd?'✅ +'+(es-PRED.yd):'❌ '+(es-PRED.yd))+') | 重高<strong>'+PRED.zg+'</strong>('+(es>PRED.zg?'✅ +'+(es-PRED.zg):'⚠ '+(es-PRED.zg))+') | 前三<strong>'+PRED.q3+'</strong>('+(es>PRED.q3?'✅':'❌ '+(es-PRED.q3))+')</p>';
+  h+='</div>';
+
+  // U1: 超常发挥警告
+  if (calc.allocPlan.slots && calc.allocPlan.slots.length>0 && calc.allocPlan.slots[0].type==='冲') {
+    h+='<div class="warning-banner"><span class="icon">⚠️</span><div><strong>超常发挥陷阱（U1更新）</strong><br>如果中考超常发挥，分配生志愿会提前锁死。2025年真实案例：632-635分考生因一模保守而被低档学校录取。分配生冲要敢于冲（详见方案）。</div></div>';
+  }
+
+  // 三、分配生
+  h+='<h3>🎯 三、分配生资格评估</h3><div class="analysis-box">';
+  h+='<p>👥 学籍<strong>'+(data.studentCount||'未填')+'人</strong> × '+Math.round(KB.allocation_ratio*100)+'%：总分配生约 <strong>'+calc.totalQ+'名</strong></p>';
+  h+='<p>📌 前三所约 <strong>'+calc.top3Q+'名</strong>（×'+Math.round(KB.top3_ratio*100)+'%） | 前八所约 <strong>'+calc.top8Q+'名</strong>（×'+Math.round(KB.top8_ratio*100)+'%）</p>';
+  if(calc.bestRank){
+    h+='<p>👤 年排<strong>'+calc.bestRank+'名</strong> → 分配概率：<span class="tag tag-'+(calc.allocProb==='高'?'high':calc.allocProb==='中'?'mid':'low')+'">'+calc.allocProb+'</span> · 前三：<span class="tag tag-'+(calc.top3Prob==='高'?'high':calc.top3Prob==='中'?'mid':'low')+'">'+calc.top3Prob+'</span></p>';
+    h+='<p style="font-size:0.78em;color:var(--text-secondary)">💡 U5更新：考虑弃分配率+滑档率，实际最低录取名次≈名额×1.35。你校有效分配范围约<span class="tag tag-mid">'+(Math.round(calc.totalQ*1.35))+'名</span></p>';
+  }
+  h+='</div>';
+
+  // Allocation Table
+  h+='<h4>📋 分配生志愿（5个平行志愿 · 校内竞争）</h4>';
+  h+='<table class="school-table"><thead><tr><th>#</th><th>类型</th><th>学校</th><th>'+CURRENT_YEAR+'分</th><th>分差</th><th>梯队</th><th>住校</th><th>地址/备注</th></tr></thead><tbody>';
+  for(var i=0;i<calc.allocPlan.slots.length;i++){
+    var e=calc.allocPlan.slots[i], s=e.s;
+    var tc=e.type==='冲'?'tag-chong':e.type==='稳'?'tag-wen':'tag-bao';
+    h+='<tr><td>'+(i+1)+'</td><td><span class="tag '+tc+'">'+e.type+'</span></td>';
+    h+='<td class="col-school"><strong>'+s.n+'</strong>'+(s.note?'<br><small style="color:var(--text-secondary)">'+s.note+'</small>':'')+'</td>';
+    h+='<td>'+s.s+'</td><td>'+(s.diff>0?'+':'')+s.diff+'</td><td>'+s.tn+'</td><td>'+s.b+'</td>';
+    h+='<td class="col-note">'+(s.a?'📍'+s.a:'')+(s.m?' 🚇'+s.m:'')+'</td></tr>';
+  }
+  h+='</tbody></table>';
+
+  // U3: 托底提醒
+  h+='<div class="warning-banner"><span class="icon">🛡️</span><div><strong>强制托底提醒（U3更新）</strong><br>第5志愿为托底学校。2025年教训：两名学生只填1-2所头部→全滑档。被录了总比滑档强。</div></div>';
+
+  // 四、裸考
+  h+='<h3>🏃 四、裸考志愿方案（第一批10个 · 全市竞争）</h3>';
+  
+  // U4: 密集段警告
+  if (calc.nkPlan.denseWarning || (calc.estScore >= 615 && calc.estScore <= 628)) {
+    h+='<div class="warning-banner"><span class="icon">⚠️</span><div><strong>密集分段警告（U4更新）</strong><br>'+(calc.estScore >= 615 && calc.estScore <= 628 ? '你的预估分在620-625密集段附近。2025年证实此分段一分可能差100-300名。裸考志愿在此分段至少拉开3-5分。':'检测到志愿间距过密。620-625分段是最激烈竞争区间。')+'</div></div>';
+  }
+  
+  h+='<table class="school-table"><thead><tr><th>#</th><th>类型</th><th>学校</th><th>'+CURRENT_YEAR+'分</th><th>分差</th><th>梯队</th><th>住校</th><th>地址/备注</th></tr></thead><tbody>';
+  for(var i=0;i<calc.nkPlan.slots.length;i++){
+    var e=calc.nkPlan.slots[i], s=e.s;
+    var tc='';
+    if(e.type==='冲') tc='tag-chong';
+    else if(e.type==='冲(难)') tc='tag-chong2';
+    else if(e.type==='稳') tc='tag-wen';
+    else tc='tag-bao';
+    h+='<tr><td>'+(i+1)+'</td><td><span class="tag '+tc+'">'+e.type+'</span></td>';
+    h+='<td class="col-school"><strong>'+s.n+'</strong>'+(s.note?'<br><small style="color:var(--text-secondary)">'+s.note+'</small>':'')+'</td>';
+    h+='<td>'+s.s+'</td><td>'+(s.diff>0?'+':'')+s.diff+'</td><td>'+s.tn+'</td><td>'+s.b+'</td>';
+    h+='<td class="col-note">'+(s.a?'📍'+s.a:'')+(s.m?' 🚇'+s.m:'')+'</td></tr>';
+  }
+  h+='</tbody></table>';
+
+  // 五、AI分析
+  h+='<h3>🤖 五、AI 综合分析与风险提示</h3><div class="analysis-box">'+aiText+'</div>';
+
+  // 六、提醒
+  h+='<h3>📅 六、重要提醒（'+CURRENT_YEAR+'年）</h3><div class="risk-box"><ul>';
+  h+='<li>📅 '+KB.schedule+'</li>';
+  h+='<li>📊 '+KB.policy_note+'</li>';
+  h+='<li>⚠ 分配生未录取不影响裸考批次</li>';
+  h+='<li>⚠ 分配生比例'+Math.round(KB.allocation_ratio*100)+'%，裸考名额相应减少</li>';
+  h+='<li>💡 本方案基于分差计算冲稳保 + 2025年真实案例优化（U1-U5全部更新）</li>';
+  h+='<li>🔮 2027年将基于'+CURRENT_YEAR+'实际录取数据自动校准</li>';
+  h+='</ul></div>';
+
+  return h;
+}
+
+// ==================== API Config ====================
+var MODEL_CONFIGS = {
+  'zhipu': {
+    name:'智谱AI', endpoint:'https://open.bigmodel.cn/api/paas/v4/chat/completions',
+    defaultKey:'d66eba51f54e4211aed6f9af217ca122.pKK63AJ6GVVRN4xk',
+    headers:function(k){return {'Content-Type':'application/json','Authorization':'Bearer '+k};},
+    body:function(m,k){return JSON.stringify({model:m,messages:[{role:'system',content:'杭州中考志愿专家，专业务实简洁。纯文本，不用Markdown。风格：鼓励但理性。'},{role:'user',content:k}],temperature:0.5,max_tokens:500});}
+  },
+  'siliconflow': {
+    name:'硅基流动', endpoint:'https://api.siliconflow.cn/v1/chat/completions',
+    defaultKey:'',
+    headers:function(k){return {'Content-Type':'application/json','Authorization':'Bearer '+k};},
+    body:function(m,k){return JSON.stringify({model:m,messages:[{role:'system',content:'杭州中考志愿专家，专业务实简洁。纯文本。'},{role:'user',content:k}],temperature:0.5,max_tokens:500});}
+  }
+};
+
+function getKey(platform){return localStorage.getItem('zk_key_'+platform)||MODEL_CONFIGS[platform].defaultKey||'';}
+function saveKey(platform,key){localStorage.setItem('zk_key_'+platform,key);}
+
+function onModelChange(){
+  var sel=document.getElementById('modelSelect').value.split('|');
+  var platform=sel[0];
+  var row=document.getElementById('apiKeyRow');
+  if(platform==='siliconflow'){
+    row.style.display='flex';
+    var key=getKey('siliconflow');
+    document.getElementById('apiKeyInput').value=key;
+    document.getElementById('keyStatus').textContent=key?'✅ 已保存':'⚠ 输入Key';
+  } else {
+    row.style.display='none';
+  }
+}
+
+function saveApiKey(){
+  var key=document.getElementById('apiKeyInput').value.trim();
+  if(key){ saveKey('siliconflow',key); document.getElementById('keyStatus').textContent='✅ 已保存'; }
+}
+
+onModelChange();
+
+// ==================== Generate ====================
+function generate() {
+  var sn = document.getElementById('schoolName').value.trim();
+  if (!sn) { showError('请填写所在中学'); return; }
+  
+  var data = {
+    nickname: document.getElementById('nickname').value.trim(),
+    schoolName: sn,
+    mock1Score: parseFloat(document.getElementById('mock1Score').value)||0,
+    mock1Rank: parseInt(document.getElementById('mock1Rank').value)||null,
+    mock2Score: parseFloat(document.getElementById('mock2Score').value)||0,
+    mock2Rank: parseInt(document.getElementById('mock2Rank').value)||null,
+    homeAddress: document.getElementById('homeAddress').value.trim(),
+    targets: document.getElementById('targets').value.trim(),
+    boarding: document.getElementById('boarding').value,
+    studentCount: parseInt(document.getElementById('studentCount').value)||null
+  };
+
+  if (!data.mock1Score && !data.mock2Score) { showError('请至少填写一模或二模分数'); return; }
+
+  document.getElementById('errorBox').style.display='none';
+  document.getElementById('loadingBox').style.display='block';
+  document.getElementById('submitBtn').disabled=true;
+  document.getElementById('reportBox').style.display='none';
+
+  var calc = compute(data);
+
+  // Build AI prompt
+  var prompt = '请为'+data.schoolName+'的考生撰写200字推荐理由。';
+  prompt += '预估中考'+(calc.estScore-5)+'~'+(calc.estScore+5)+'分，';
+  if(data.mock1Rank) prompt += '一模年排'+data.mock1Rank+'，';
+  if(data.mock2Rank) prompt += '二模年排'+data.mock2Rank+'，';
+  prompt += '分配名额约'+calc.totalQ+'个，分配概率'+calc.allocProb+'，前三概率'+calc.top3Prob+'。';
+  prompt += '2025年真实案例警告：超常发挥后分配生填太保守会后悔。请基于此给出建议。';
+  if(data.targets) prompt += '目标：'+data.targets;
+
+  var sel = document.getElementById('modelSelect').value.split('|');
+  var platform = sel[0], model = sel[1];
+  var cfg = MODEL_CONFIGS[platform];
+  var key = getKey(platform);
+  if (!key) { showError('请先输入API Key'); resetBtn(); return; }
+
+  fetch(cfg.endpoint, {
+    method:'POST', headers:cfg.headers(key), body:cfg.body(model, prompt)
+  })
+  .then(function(r){if(!r.ok) throw new Error(r.status+' '+r.statusText); return r.json();})
+  .then(function(json){
+    var ai = (json.choices&&json.choices[0]&&json.choices[0].message.content)||'AI分析暂不可用';
+    document.getElementById('reportBody').innerHTML = renderReport(data, calc, ai);
+    document.getElementById('loadingBox').style.display='none';
+    document.getElementById('reportBox').style.display='block';
+    document.getElementById('reportBox').scrollIntoView({behavior:'smooth'});
+    resetBtn();
+  })
+  .catch(function(e){
+    showError('AI调用失败: '+e.message+'。将使用纯计算公式生成方案。');
+    document.getElementById('reportBody').innerHTML = renderReport(data, calc, '<p style="color:#f39c12">⚠ AI服务暂不可用，以下为纯数据计算方案。建议检查网络或API Key后重试。</p><p>核心建议：分配生冲要敢于冲（10-20分），第5志愿必须托底，裸考在620-625分段至少拉开3-5分梯度。</p>');
+    document.getElementById('loadingBox').style.display='none';
+    document.getElementById('reportBox').style.display='block';
+    document.getElementById('reportBox').scrollIntoView({behavior:'smooth'});
+    resetBtn();
+  });
 }
 
 function showError(msg) {
-    const box = document.getElementById('errorBox');
-    box.textContent = '❌ ' + msg;
-    box.style.display = 'block';
+  var el = document.getElementById('errorBox');
+  el.textContent = msg; el.style.display = 'block';
+  setTimeout(function(){ el.style.display='none'; }, 6000);
+}
+
+function resetBtn() {
+  document.getElementById('submitBtn').disabled = false;
+  document.getElementById('loadingBox').style.display = 'none';
 }
 </script>
 </body>
