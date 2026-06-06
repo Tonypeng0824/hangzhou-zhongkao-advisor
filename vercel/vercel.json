@@ -1,8 +1,9 @@
 {
-  "functions": {
-    "api/zhongkao.js": {
-      "memory": 512,
-      "maxDuration": 30
-    }
-  }
+  "version": 2,
+  "buildCommand": "",
+  "outputDirectory": ".",
+  "routes": [
+    { "src": "/(.*\\.html)", "dest": "/$1" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
 }
