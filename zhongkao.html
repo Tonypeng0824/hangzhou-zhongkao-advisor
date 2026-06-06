@@ -452,10 +452,15 @@ body {
                     <option value="ollama|qwen3:8b">Qwen3-8B（本地·质量好）</option>
                     <option value="ollama|glm-4.7-flash:latest">GLM-4.7-Flash（本地·多语言）</option>
                 </optgroup>
+                <optgroup label="OpenRouter（免费模型·需Key）">
+                    <option value="openrouter|openrouter/free">自动路由（系统分配免费模型）</option>
+                    <option value="openrouter|deepseek/deepseek-r1-0528:free">DeepSeek-R1（免费）</option>
+                    <option value="openrouter|z-ai/glm-4.5-air:free">GLM-4.5-Air（免费）</option>
+                </optgroup>
       </select>
     </div>
     <div class="model-row" id="apiKeyRow" style="display:none">
-      <span>🔑 硅基流动Key：</span>
+      <span id="apiKeyLabel">🔑 API Key：</span>
       <input type="password" id="apiKeyInput" placeholder="输入API Key" style="flex:1;padding:6px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.88em;background:rgba(0,0,0,0.3);color:var(--text-primary)">
       <button onclick="saveApiKey()" style="padding:6px 14px;background:var(--accent-gold);color:#1a1a2e;border:none;border-radius:8px;cursor:pointer;font-size:0.85em;font-weight:700">💾 保存</button>
       <span id="keyStatus" style="font-size:0.78em;color:var(--text-secondary)"></span>
@@ -909,6 +914,17 @@ var MODEL_CONFIGS = {
     defaultKey:'',  // 本地模型不需要Key
     headers:function(k){return {'Content-Type':'application/json'};},
     body:function(m,k){return JSON.stringify({model:m,messages:[{role:'user',content:k}],stream:false,options:{temperature:0.5,num_predict:500}});}
+  },
+  'openrouter': {
+    name:'OpenRouter免费模型', endpoint:'https://openrouter.ai/api/v1/chat/completions',
+    defaultKey:'',  // 需用户填写 sk-or-v1-...
+    headers:function(k){return {
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+k,
+        'HTTP-Referer': 'https://hangzhou-zhongkao-advisor.vercel.app',
+        'X-Title': '杭州中考志愿顾问'
+    };},
+    body:function(m,k){return JSON.stringify({model:m,messages:[{role:'user',content:k}],temperature:0.5,max_tokens:500});}
   }
 };
 
@@ -921,11 +937,15 @@ function onModelChange(){
   var sel=document.getElementById('modelSelect').value.split('|');
   var platform=sel[0];
   var row=document.getElementById('apiKeyRow');
-  // ollama 本地模型不需要 Key
-  if(platform==='siliconflow' || platform==='zhipu'){
+  var label=document.getElementById('apiKeyLabel');
+  // 需要API Key的平台
+  if(platform==='siliconflow' || platform==='zhipu' || platform==='openrouter'){
     row.style.display='flex';
     var key=getKey(platform);
     document.getElementById('apiKeyInput').value=key;
+    // 动态更新标签
+    var cfg=MODEL_CONFIGS[platform];
+    label.textContent=cfg.name+' Key：';
     document.getElementById('keyStatus').textContent=key?'✅ 已保存':'⚠ 输入Key';
   } else if(platform==='ollama'){
     row.style.display='none';
@@ -936,8 +956,10 @@ function onModelChange(){
 }
 
 function saveApiKey(){
+  var sel=document.getElementById('modelSelect').value.split('|');
+  var platform=sel[0];
   var key=document.getElementById('apiKeyInput').value.trim();
-  if(key){ saveKey('siliconflow',key); document.getElementById('keyStatus').textContent='✅ 已保存'; }
+  if(key){ saveKey(platform,key); document.getElementById('keyStatus').textContent='✅ 已保存'; }
 }
 
 onModelChange();
