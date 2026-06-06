@@ -440,13 +440,18 @@ body {
     <div class="model-row">
       <span>🤖 模型：</span>
       <select id="modelSelect" onchange="onModelChange()">
-        <optgroup label="智谱AI（已配置·免费）">
+        <optgroup label="硅基流动（云端·推荐）">
                     <option value="siliconflow|Qwen/Qwen3-8B" selected>Qwen3-8B（中文好·默认）</option>
                     <option value="siliconflow|deepseek-ai/DeepSeek-R1">DeepSeek-R1（推理强）</option>
                 </optgroup>
-                <optgroup label="智谱AI（已配置·免费·⚠可能CORS受限）">
+                <optgroup label="智谱AI（云端·免费·⚠️可能CORS受限）">
                     <option value="zhipu|glm-4-flash">GLM-4-Flash（快速·本地可用）</option>
-        </optgroup>
+                </optgroup>
+                <optgroup label="本地Ollama（无需Key·需设置CORS）">
+                    <option value="ollama|qwen3:4b">Qwen3-4B（本地·快速）</option>
+                    <option value="ollama|qwen3:8b">Qwen3-8B（本地·质量好）</option>
+                    <option value="ollama|glm-4.7-flash:latest">GLM-4.7-Flash（本地·多语言）</option>
+                </optgroup>
       </select>
     </div>
     <div class="model-row" id="apiKeyRow" style="display:none">
@@ -457,6 +462,7 @@ body {
     </div>
     <div class="model-row" style="gap:4px;font-size:0.76em;color:var(--text-secondary);padding-top:0;opacity:0.6">
       <span>💡 先选模型，再点生成。Key仅存本地浏览器。</span>
+      <span id="ollamaStatus" style="display:none;font-size:0.76em;"></span>
     </div>
     <button class="btn-primary" id="submitBtn" onclick="generate()">🚀 生成志愿方案</button>
   </div>
@@ -897,10 +903,16 @@ var MODEL_CONFIGS = {
     defaultKey:'sk-tyohyikrluknwkwxwerrwmxldlgzzicwaanazgvpoihsoohb',
     headers:function(k){return {'Content-Type':'application/json','Authorization':'Bearer '+k};},
     body:function(m,k){return JSON.stringify({model:m,messages:[{role:'system',content:'杭州中考志愿专家，专业务实简洁。纯文本。'},{role:'user',content:k}],temperature:0.5,max_tokens:500});}
+  },
+  'ollama': {
+    name:'本地Ollama', endpoint:'http://localhost:11434/api/chat',
+    defaultKey:'',  // 本地模型不需要Key
+    headers:function(k){return {'Content-Type':'application/json';},
+    body:function(m,k){return JSON.stringify({model:m,messages:[{role:'user',content:k}],stream:false,options:{temperature:0.5,num_predict:500}});}
   }
 };
 
-var AI_TIMEOUT_MS = 45000; // 45s timeout (SiliconFlow can be slow on first request)
+var AI_TIMEOUT_MS = 120000; // 120s timeout (本地模型需要更长时间) // 45s timeout (SiliconFlow can be slow on first request)
 
 function getKey(platform){return localStorage.getItem('zk_key_'+platform)||MODEL_CONFIGS[platform].defaultKey||'';}
 function saveKey(platform,key){localStorage.setItem('zk_key_'+platform,key);}
@@ -909,11 +921,15 @@ function onModelChange(){
   var sel=document.getElementById('modelSelect').value.split('|');
   var platform=sel[0];
   var row=document.getElementById('apiKeyRow');
-  if(platform==='siliconflow'){
+  // ollama 本地模型不需要 Key
+  if(platform==='siliconflow' || platform==='zhipu'){
     row.style.display='flex';
-    var key=getKey('siliconflow');
+    var key=getKey(platform);
     document.getElementById('apiKeyInput').value=key;
     document.getElementById('keyStatus').textContent=key?'✅ 已保存':'⚠ 输入Key';
+  } else if(platform==='ollama'){
+    row.style.display='none';
+    checkOllamaCORS();
   } else {
     row.style.display='none';
   }
@@ -970,7 +986,8 @@ function generate() {
   var platform = sel[0], model = sel[1];
   var cfg = MODEL_CONFIGS[platform];
   var key = getKey(platform);
-  if (!key) { showError('请先选择模型并输入API Key（硅基流动需要Key，智谱内置Key）'); resetBtn(); return; }
+  // Ollama 本地模型不需要 Key
+  if (platform !== 'ollama' && !key) { showError('请先选择模型并输入API Key（硅基流动需要Key，智谱内置Key）'); resetBtn(); return; }
 
   // Use AbortController for timeout
   var controller = new AbortController();
@@ -980,13 +997,19 @@ function generate() {
     method:'POST', headers:cfg.headers(key), body:cfg.body(model, prompt),
     signal: controller.signal
   })
-  .then(function(r){
+  .then(function(json){
     clearTimeout(timeoutId);
     if(!r.ok) throw new Error('HTTP '+r.status+': '+r.statusText);
     return r.json();
   })
   .then(function(json){
-    var ai = (json.choices&&json.choices[0]&&json.choices[0].message.content)||'AI分析暂不可用';
+    // 根据平台解析响应
+    var ai = '';
+    if(platform === 'ollama'){
+      ai = (json.message && json.message.content) || 'AI分析暂不可用（Ollama本地模型）';
+    } else {
+      ai = (json.choices&&json.choices[0]&&json.choices[0].message.content)||'AI分析暂不可用';
+    }
     document.getElementById('reportBody').innerHTML = renderReport(data, calc, ai);
     document.getElementById('loadingBox').style.display='none';
     document.getElementById('reportBox').style.display='block';
@@ -1021,6 +1044,40 @@ function resetBtn() {
   document.getElementById('submitBtn').disabled = false;
   document.getElementById('loadingBox').style.display = 'none';
 }
+
+// ==================== Ollama CORS Check ====================
+(function checkOllama() {
+  //  only check if ollama is selected
+  var select = document.getElementById('modelSelect');
+  if (!select) return;
+  
+  // Check if Ollama server is reachable (ignore CORS — we just need to know if server is up)
+  fetch('http://localhost:11434/', { mode: 'no-cors' })
+    .then(function() {
+      console.log('Ollama server is reachable');
+    })
+    .catch(function() {
+      console.log('Ollama server not reachable');
+    });
+})();
+
+function checkOllamaCORS() {
+  var sel = document.getElementById('modelSelect').value.split('|');
+  if (sel[0] === 'ollama') {
+    fetch('http://localhost:11434/api/tags')
+      .then(function(r) {
+        console.log('Ollama CORS OK');
+        document.getElementById('ollamaStatus').textContent = '✅ Ollama 可访问';
+        document.getElementById('ollamaStatus').style.color = '#2ecc71';
+      })
+      .catch(function(e) {
+        console.warn('Ollama CORS issue:', e);
+        document.getElementById('ollamaStatus').textContent = '⚠️ Ollama CORS 受限，请设置 OLLAMA_ORIGINS=*';
+        document.getElementById('ollamaStatus').style.color = '#f39c12';
+      });
+  }
+}
+
 </script>
 </body>
 </html>
