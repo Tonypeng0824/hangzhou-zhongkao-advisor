@@ -587,10 +587,10 @@ function switchYear(year) {
   // Update badge
   var badge = document.getElementById('yearBadge');
   if (year === '2025') {
-    badge.textContent = '📅 2025年 · 分配生19.4% · 8004名额';
+    badge.textContent= '📅 2025年 · 分配生19.4% · 8004名额';
     badge.className = 'year-badge year-badge-2025';
   } else {
-    badge.textContent = '📅 2026年 · 分配生20.5% · 9021名额';
+    badge.textContent= '📅 2026年 · 分配生20.5% · 9021名额';
     badge.className = 'year-badge year-badge-2026';
   }
   // Hide previous report
@@ -797,7 +797,7 @@ function compute(data) {
 function renderReport(data, calc, aiText) {
   var sn = data.schoolName, nick = data.nickname||'考生';
   var h = '';
-  document.getElementById('reportTitle').textContent = nick+' — '+sn+' 中考志愿方案';
+  document.getElementById('reportTitle').textContent= nick+' — '+sn+' 中考志愿方案';
 
   // 一、基本信息
   h+='<h3>💡 一、考生基本信息</h3><table class="info-table">';
@@ -907,7 +907,7 @@ var MODEL_CONFIGS = {
   'ollama': {
     name:'本地Ollama', endpoint:'http://localhost:11434/api/chat',
     defaultKey:'',  // 本地模型不需要Key
-    headers:function(k){return {'Content-Type':'application/json';},
+    headers:function(k){return {'Content-Type':'application/json'};},
     body:function(m,k){return JSON.stringify({model:m,messages:[{role:'user',content:k}],stream:false,options:{temperature:0.5,num_predict:500}});}
   }
 };
@@ -969,7 +969,7 @@ function generate() {
 
   // Show which model is being called
   var sel2 = document.getElementById('modelSelect').value.split('|');
-  document.querySelector('#loadingBox p').textContent = '正在调用 '+MODEL_CONFIGS[sel2[0]].name+'('+sel2[1]+')...';
+  document.querySelector('#loadingBox p').textContent= '正在调用 '+MODEL_CONFIGS[sel2[0]].name+'('+sel2[1]+')...';
 
   var calc = compute(data);
 
@@ -1036,7 +1036,7 @@ function generate() {
 
 function showError(msg) {
   var el = document.getElementById('errorBox');
-  el.textContent = msg; el.style.display = 'block';
+  el.textContent= msg; el.style.display = 'block';
   setTimeout(function(){ el.style.display='none'; }, 6000);
 }
 
@@ -1067,12 +1067,12 @@ function checkOllamaCORS() {
     fetch('http://localhost:11434/api/tags')
       .then(function(r) {
         console.log('Ollama CORS OK');
-        document.getElementById('ollamaStatus').textContent = '✅ Ollama 可访问';
+        document.getElementById('ollamaStatus').textContent= '✅ Ollama 可访问';
         document.getElementById('ollamaStatus').style.color = '#2ecc71';
       })
       .catch(function(e) {
         console.warn('Ollama CORS issue:', e);
-        document.getElementById('ollamaStatus').textContent = '⚠️ Ollama CORS 受限，请设置 OLLAMA_ORIGINS=*';
+        document.getElementById('ollamaStatus').textContent= '⚠️ Ollama CORS 受限，请设置 OLLAMA_ORIGINS=*';
         document.getElementById('ollamaStatus').style.color = '#f39c12';
       });
   }
