@@ -5,7 +5,7 @@
 # =============================================================================
 
 meta:
-  version: "2.1"
+  version: "2.7"
   generated_by: "WorkBuddy 数智助理"
   last_updated: "2026-06-05"
   data_sources:
@@ -1040,10 +1040,10 @@ middle_school_profile:
     school_name: "嘉绿苑中学"
     district: "西湖区"
     type: "中上学校"
-    graduates_2026: 300
-    allocation_quota_total: 62        # 300*20.5%
-    allocation_quota_top3: 10         # 300*3.2%
-    allocation_quota_top8: 25         # 300*8.3%
+    graduates_2026: 451
+    allocation_quota_total: 92        # 451*20.5%=92（OCR确认学籍，原估算300→451）
+    allocation_quota_top3: 14         # 451*3.2%
+    allocation_quota_top8: 37         # 451*8.3%
     known_scores:
       - student: "思瑜"
         mock2: 576.5
@@ -1056,11 +1056,11 @@ middle_school_profile:
         percentile: "前74%"
         target_schools: ["长河二中(冲)", "源清二中(稳)", "杭四吴山(保)"]
     allocation_rank_reference:
-      top3_alloc: "年级前10名"
-      top8_alloc: "年级前25名"
-      yougao_alloc: "年级前62名"
-      top3_naked: "年级前5名(约600+分)"
-      top8_naked: "年级前15名(约590+分)"
+      top3_alloc: "年级前14名"
+      top8_alloc: "年级前37名"
+      yougao_alloc: "年级前92名"
+      top3_naked: "年级前7名(约600+分)"
+      top8_naked: "年级前20名(约590+分)"
     xihu_comparison:
       - school: "十三中集团"
         total_quota: 226
@@ -1068,12 +1068,12 @@ middle_school_profile:
         ratio: 20.5
       - school: "翠苑中学"
         total_quota: 74
-        graduates: 361
+        graduates: 363
         ratio: 20.5
-      - school: "嘉绿苑中学(估)"
-        total_quota: 62
-        graduates: 300
-        ratio: 20.7
+      - school: "嘉绿苑中学(OCR确认)"
+        total_quota: 92
+        graduates: 451
+        ratio: 20.5
 
   # === 通用画像模板（适用于杭州市区任意初中）===
   generic_profile_template:
@@ -1315,8 +1315,8 @@ allocation_by_junior_high_2026:
     all_xihu_estimate:
       note: "以下29校分配名额按毕业生×20.5%估算"
       public_schools:
-        - {name: "杭十三中总校", quota: 226, graduates: 1102, status: "OCR确认"}
-        - {name: "嘉绿苑中学(十三中集团)", quota: 62, graduates: 300, status: "估算"}
+        - {name: "杭十三中总校", quota: 226, graduates: 1108, status: "OCR确认"}
+        - {name: "嘉绿苑中学(十三中集团)", quota: 62, graduates: 451, status: "OCR确认(2026-06-05截图)"}
         - {name: "翠苑中学(翠苑+文华)", quota: 74, graduates: 361, status: "OCR确认"}
         - {name: "丰潭中学(丰潭)", quota: 51, graduates: 250, status: "估算"}
         - {name: "丰潭中学(景汇)", quota: 41, graduates: 200, status: "估算"}
@@ -1352,31 +1352,32 @@ allocation_by_junior_high_2026:
     # === 测试用例：嘉绿苑中学逐高中分配名额估算 ===
     jialvyuan_estimate:
       note: "【测试用例】以下为公式估算。面向全系统的通用逐校估算公式为：初中学籍 × (各高中配额/44000)"
-      graduates: 300
-      total_quota: 62
-      note: "以下为公式估算（各高中配额/全市9021×本校62分配名额），每校±1人"
+      graduates: 451
+      total_quota: 92
+      enrollment_source: "OCR截图确认(2026-06-05)，原估算300→实际451，配额62→92"
+      note2: "以下为公式估算（各高中配额/全市44000×本校451学籍），每校±1人"
       top3:
-        - {school: "杭二滨江", quota: 3}
-        - {school: "学军西溪", quota: 3}
-        - {school: "杭高贡院", quota: 3}
+        - {school: "杭二滨江", quota: 5}
+        - {school: "学军西溪", quota: 5}
+        - {school: "杭高贡院", quota: 5}
       top8_other:
-        - {school: "杭十四凤起", quota: 3}
-        - {school: "杭四下沙", quota: 3}
-        - {school: "浙大附玉泉", quota: 3}
-        - {school: "长河高中", quota: 3}
-        - {school: "杭师附中", quota: 4}
+        - {school: "杭十四凤起", quota: 4}
+        - {school: "杭四下沙", quota: 4}
+        - {school: "浙大附玉泉", quota: 4}
+        - {school: "长河高中", quota: 5}
+        - {school: "杭师附中", quota: 6}
       yougao_40pct:
-        - {school: "学军紫金港", quota: 2}
-        - {school: "杭高钱塘", quota: 3}
-        - {school: "杭十四康桥", quota: 2}
-        - {school: "源清中学", quota: 2}
-        - {school: "杭高钱江", quota: 2}
-        - {school: "杭二高新", quota: 2}
-        - {school: "浙大附实验", quota: 2}
-        - {school: "杭二东河", quota: 1}
-        - {school: "杭四江东", quota: 2}
-        - {school: "杭二钱江", quota: 1}
-      remaining: 14
+        - {school: "学军紫金港", quota: 3}
+        - {school: "杭高钱塘", quota: 4}
+        - {school: "杭十四康桥", quota: 3}
+        - {school: "源清中学", quota: 3}
+        - {school: "杭高钱江", quota: 3}
+        - {school: "杭二高新", quota: 3}
+        - {school: "浙大附实验", quota: 3}
+        - {school: "杭二东河", quota: 2}
+        - {school: "杭四江东", quota: 3}
+        - {school: "杭二钱江", quota: 2}
+      remaining: 26
       remaining_note: "其余名额分散在各分校/县中（每校一般1-2个名额）"
 
   binjiang:
@@ -1420,6 +1421,153 @@ allocation_by_junior_high_2026:
         # 40%比例学校（22所）：学籍 × (各校配额/44000)
       example_xihu_300:
         note: "300人初中，每校1-4名额，总计约62名额"
+
+# =============================================================================
+# 九-A2、2026年各初中学籍人数（来源：截图OCR，误差±5人）
+# 数据来源：2026年杭州100所初中中考学籍人数参考截图
+# OCR方式：OCR.Space API（免费，chs中文识别）
+# 更新时间：2026-06-05
+# =============================================================================
+junior_high_enrollment_2026:
+  data_source: "2026年杭州100所初中中考学籍人数参考截图（user截图上传）"
+  ocr_method: "OCR.Space API"
+  accuracy: "±5"
+  total_schools: 100
+  total_enrollment: 36790
+  total_students_context: 44000
+  coverage_pct: 83.6
+  coverage_note: "覆盖约83.6%考生（36790/44000），未含个别生及部分未收录学校"
+  full_school_note: "注意：没有在表格中的学校属于暂时没收集到数据的"
+
+  gongshu:
+    name: "拱墅区"
+    school_count: 28
+    total_enrollment: 8982
+    schools:
+      - {name: "拱宸中学", enrollment: 407}
+      - {name: "桃源中学", enrollment: 559}
+      - {name: "启正中学", enrollment: 234}
+      - {name: "十四附属", enrollment: 289}
+      - {name: "安吉路新天地", enrollment: 64}
+      - {name: "安吉路实验", enrollment: 260}
+      - {name: "文晖实验", enrollment: 348}
+      - {name: "华师附", enrollment: 392}
+      - {name: "大成岳家湾", enrollment: 191}
+      - {name: "锦绣中学", enrollment: 400}
+      - {name: "文澜中学", enrollment: 100}
+      - {name: "文澜实验", enrollment: 461}
+      - {name: "观成实验", enrollment: 175}
+      - {name: "观成武林", enrollment: 470}
+      - {name: "大关实验", enrollment: 373}
+      - {name: "慧澜中学", enrollment: 240}
+      - {name: "景成实验", enrollment: 260}
+      - {name: "明珠中学", enrollment: 353}
+      - {name: "康桥中学", enrollment: 230}
+      - {name: "风帆中学", enrollment: 333}
+      - {name: "朝晖中学", enrollment: 466}
+      - {name: "春蕾中学", enrollment: 436}
+      - {name: "育才中学", enrollment: 466}
+      - {name: "大城北", enrollment: 355}
+      - {name: "启航中学", enrollment: 280}
+      - {name: "长阳中学", enrollment: 285}
+      - {name: "胜蓝中学", enrollment: 325}
+      - {name: "星潮中学", enrollment: 230}
+
+  shangcheng:
+    name: "上城区"
+    school_count: 24
+    total_enrollment: 9213
+    schools:
+      - {name: "钱江外国语", enrollment: 191}
+      - {name: "四季青", enrollment: 299}
+      - {name: "采荷中学", enrollment: 676}
+      - {name: "杭州中学", enrollment: 780}
+      - {name: "杭十中", enrollment: 255}
+      - {name: "建兰中学", enrollment: 485}
+      - {name: "笕成中学", enrollment: 333}
+      - {name: "景芳中学", enrollment: 265}
+      - {name: "开元中学", enrollment: 353}
+      - {name: "丁兰实验", enrollment: 637}
+      - {name: "澎扬中学", enrollment: 191}
+      - {name: "东城实验", enrollment: 431}
+      - {name: "丁荷中学", enrollment: 353}
+      - {name: "笕桥实验", enrollment: 431}
+      - {name: "惠兴中学", enrollment: 343}
+      - {name: "采荷实验", enrollment: 382}
+      - {name: "夏衍中学", enrollment: 260}
+      - {name: "天杭实验", enrollment: 319}
+      - {name: "钱学森学校", enrollment: 245}
+      - {name: "钱江新城实验", enrollment: 422}
+      - {name: "采荷濮家", enrollment: 402}
+      - {name: "清河实验", enrollment: 245}
+      - {name: "澎诚中学", enrollment: 440}
+      - {name: "丁蕙实验", enrollment: 475}
+
+  xihu:
+    name: "西湖区"
+    school_count: 23
+    total_enrollment: 9219
+    schools:
+      - {name: "十三中", enrollment: 1108}
+      - {name: "嘉绿苑", enrollment: 451}
+      - {name: "丰潭中学", enrollment: 353}
+      - {name: "紫金港", enrollment: 431}
+      - {name: "翠苑中学", enrollment: 363}
+      - {name: "弘益中学", enrollment: 461}
+      - {name: "绿城育华", enrollment: 344}
+      - {name: "文华中学", enrollment: 509}
+      - {name: "三墩中学", enrollment: 515}
+      - {name: "公益中学", enrollment: 516}
+      - {name: "文理中学", enrollment: 431}
+      - {name: "之江实验", enrollment: 259}
+      - {name: "保俶塔实验", enrollment: 434}
+      - {name: "西溪中学", enrollment: 524}
+      - {name: "保俶塔申花", enrollment: 255}
+      - {name: "景汇中学", enrollment: 372}
+      - {name: "崇德中学", enrollment: 313}
+      - {name: "十五中本部", enrollment: 330}
+      - {name: "云城中学", enrollment: 123}
+      - {name: "吉鸿中学", enrollment: 168}
+      - {name: "上泗中学", enrollment: 620}
+      - {name: "西湖一实", enrollment: 174}
+      - {name: "之江一中", enrollment: 165}
+
+  binjiang:
+    name: "滨江区"
+    school_count: 13
+    total_enrollment: 4363
+    schools:
+      - {name: "白马湖", enrollment: 294}
+      - {name: "高新实验", enrollment: 730}
+      - {name: "滨和中学", enrollment: 328}
+      - {name: "滨兰实验", enrollment: 228}
+      - {name: "江南实验", enrollment: 603}
+      - {name: "滨文中学", enrollment: 333}
+      - {name: "长河中学", enrollment: 436}
+      - {name: "闻涛中学", enrollment: 514}
+      - {name: "浦沿中学", enrollment: 260}
+      - {name: "竺可桢", enrollment: 147}
+      - {name: "湖畔中学", enrollment: 216}
+      - {name: "滨兴学校", enrollment: 102}
+      - {name: "西兴中学", enrollment: 172}
+
+  qiantang:
+    name: "钱塘区"
+    school_count: 12
+    total_enrollment: 5013
+    schools:
+      - {name: "金沙湖", enrollment: 299}
+      - {name: "文海实验", enrollment: 539}
+      - {name: "新湾中学", enrollment: 436}
+      - {name: "杭实外", enrollment: 142}
+      - {name: "下沙中学", enrollment: 588}
+      - {name: "养正学校", enrollment: 353}
+      - {name: "学正中学", enrollment: 617}
+      - {name: "景苑中学", enrollment: 520}
+      - {name: "启成", enrollment: 216}
+      - {name: "启源中学", enrollment: 510}
+      - {name: "义蓬中学", enrollment: 623}
+      - {name: "前进中学", enrollment: 170}
 
 # =============================================================================
 # 九-B、周边区县数据说明（萧山/余杭/临平/富阳/临安）
